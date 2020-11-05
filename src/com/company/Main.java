@@ -15,6 +15,7 @@ public class Main {
         System.out.println("tjena allihopa detta är ett test från er SCRUM MASTER(vaktmästare) Andreas");
         System.out.println("skibbedi bababa");
         System.out.println("hallåejjjeasdlfmdäklmfäwp");
+        System.out.println("vi gör en ny ändring för att visa hur de funkar");
         try {
             app.use(Middleware.statics(Paths.get("www").toString()));
         } catch (IOException e) {
