@@ -12,6 +12,8 @@ public class Main {
         Database db = new Database();
         Express app = new Express();
 
+        System.out.println("tjena allihopa detta är ett test från er SCRUM MASTER(vaktmästare) Andreas");
+
         try {
             app.use(Middleware.statics(Paths.get("www").toString()));
         } catch (IOException e) {
