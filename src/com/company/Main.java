@@ -11,7 +11,8 @@ public class Main {
     public static void main(String[] args) {
         Database db = new Database();
         Express app = new Express();
-
+        System.out.println("Hello");
+        
         try {
             app.use(Middleware.statics(Paths.get("www").toString()));
         } catch (IOException e) {
