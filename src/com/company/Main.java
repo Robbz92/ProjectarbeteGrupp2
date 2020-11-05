@@ -17,6 +17,7 @@ public class Main {
         System.out.println("hallåejjjeasdlfmdäklmfäwp");
         System.out.println("vi gör en ny ändring för att visa hur de funkar");
         System.out.println("En uppdatering!");
+        System.out.println("bilal");
         try {
             app.use(Middleware.statics(Paths.get("www").toString()));
         } catch (IOException e) {
