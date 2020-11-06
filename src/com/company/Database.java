@@ -47,4 +47,15 @@ public class Database {
 
         return notes;
     }
+
+    public void deleteItemFromDB(int dataID){
+        try{
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM todos WHERE id = ?");
+            stmt.setInt(1, dataID);
+            stmt.executeUpdate();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
