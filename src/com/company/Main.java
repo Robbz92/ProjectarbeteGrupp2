@@ -2,7 +2,6 @@ package com.company;
 
 import express.Express;
 import express.middleware.Middleware;
-
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
@@ -27,6 +26,15 @@ public class Main {
 
             // send list to site
             res.json(noteList);
+        });
+
+        // get dataID
+        app.post("/rest/dataID", (req, res) ->{
+            int dataID = (int)req.getBody().get("id");
+            db.deleteItemFromDB(dataID);
+
+            System.out.println("Removed dataID: " + dataID);
+            res.send("Ok");
         });
 
         // Path to HTML/CSS/JS
