@@ -53,6 +53,8 @@ function rendText(){
         noteList.innerHTML += textLi;
     }
 }
+
+
 const categoryInput= document.querySelector('.category-input');
 const categoryList= document.querySelector('.category-list');
 
