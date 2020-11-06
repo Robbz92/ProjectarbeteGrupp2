@@ -1,9 +1,8 @@
 package com.company;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import express.utils.Utils;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,5 +29,22 @@ public class Database {
         catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    public List<Note> getNotesFromDB(){
+        List<Note> notes = new ArrayList<>();
+
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT text, id FROM todos");
+            ResultSet resultSet = stmt.executeQuery();
+
+            Note[] note = (Note[]) Utils.readResultSetToObject(resultSet, Note[].class);
+            notes = List.of(note);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return notes;
     }
 }

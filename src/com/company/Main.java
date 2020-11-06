@@ -5,6 +5,7 @@ import express.middleware.Middleware;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class Main {
 
@@ -18,6 +19,14 @@ public class Main {
             db.addContentToDB(content);
 
             res.send("Ok");
+        });
+
+        // fetch all todo-items from sql
+        app.get("/rest/test", (req, res) ->{
+            List<Note> noteList = db.getNotesFromDB();
+
+            // send list to site
+            res.json(noteList);
         });
 
         // Path to HTML/CSS/JS

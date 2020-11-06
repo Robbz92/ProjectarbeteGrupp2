@@ -1,4 +1,8 @@
+let myArr = [];
 // Add todoItem to db
+
+getJSON();
+
 function addToDo(){
     let desc = document.querySelector("#ToDo");
 
@@ -20,4 +24,32 @@ async function POSTJSON(desc){
     });
 
     // Continue here to fetch a JSON object from db..
+    getJSON();
+}
+
+async function getJSON(){
+    let result = await fetch("/rest/test");
+
+    content = await result.json();
+    myArr = content
+
+    console.log(myArr);
+
+    rendText();
+}
+
+function rendText(){
+    noteList = document.querySelector("#myList");
+    noteList.innerHTML = "";
+
+    for(let content of myArr){
+        let textLi = `
+            <li id="li">
+                ${content.text}
+                
+                <span data-id="${content.id}"></span>
+            </li>
+        `;
+        noteList.innerHTML += textLi;
+    }
 }
