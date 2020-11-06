@@ -1,0 +1,9 @@
+
+
+div.sidenav{
+    position: fixed;
+
+}
+div.main{
+    margin-left: 300px;
+}

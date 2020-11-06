@@ -4,8 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <header>
+        <a>PIM</a> <!--logo-->
+        <input type="text" placeholder="search">
+    </header>
+    <main>
+        <div class="sidenav">
+            <input type="text" placeholder="skriv ner your kategori">
+            <button id="add_category"onclick="addCategory()">add</button>
+            <ul>
+            </ul>
+        </div>
+        <!--stuff in the middle-->
+        <div class="main">
+            <div id="todo">
+                <h3>My Todo list</h3>
+                <input id="ToDo" type="text"placeholder="type your goals">
+                <button id="ToDo_add" onclick= "addToDo()">add to list</button>
+                <ul>
+                </ul>
+
+            </div>
+            <div id="filer">
+                <h3>My Files</h3>
+                <button id="addFiles">ADD FILES</button>
+
+            </div>
+            <div id="bilder">
+                <h3>My Pictures</h3>
+                <button id="addPics">ADD PICS</button>
+
+            </div>
+        </div>
+    </main>  
 </body>
 </html>
