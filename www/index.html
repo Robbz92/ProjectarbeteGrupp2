@@ -13,9 +13,12 @@
     </header>
     <main>
         <div class="sidenav">
-            <input type="text" placeholder="skriv ner your kategori">
+            <input type="text" class="category-input" placeholder="skriv ner your kategori">
             <button id="add_category"onclick="addCategory()">add</button>
-            <ul>
+            <ul class="category-list">
+                <div class="category">
+                <li>All categorys</li>
+            </div>
             </ul>
         </div>
         <!--stuff in the middle-->
@@ -26,7 +29,6 @@
                 <button id="ToDo_add" onclick= "addToDo()">add to list</button>
                 <ul>
                 </ul>
-
             </div>
             <div id="filer">
                 <h3>My Files</h3>
@@ -39,6 +41,7 @@
 
             </div>
         </div>
-    </main>  
+    </main>
+    <script src="main.js"></script>
 </body>
 </html>

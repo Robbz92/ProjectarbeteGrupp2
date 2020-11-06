@@ -7,3 +7,18 @@ div.sidenav{
 div.main{
     margin-left: 300px;
 }
+.category li{
+
+font-family: Arial Black;
+
+list-style-type: none;
+
+font-size: 200%;
+
+}
+li:hover{
+
+font-size: 215%;
+color: green;
+
+}
