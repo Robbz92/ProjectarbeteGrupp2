@@ -5,6 +5,7 @@ import express.middleware.Middleware;
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.List;
 
 public class Main {
 
@@ -12,18 +13,30 @@ public class Main {
         Database db = new Database();
         Express app = new Express();
 
-        System.out.println("tjena allihopa detta är ett test från er SCRUM MASTER(vaktmästare) Andreas");
-        System.out.println("skibbedi bababa");
-        System.out.println("hallåejjjeasdlfmdäklmfäwp");
-        System.out.println("vi gör en ny ändring för att visa hur de funkar");
-        System.out.println("En uppdatering!");
-        System.out.println("bilal");
+        // add todoo items in sql
+        app.post("/rest/notes", (req,res) ->{
+            String content = (String)req.getBody().get("text");
+            db.addContentToDB(content);
+
+            res.send("Ok");
+        });
+
+        // fetch all todo-items from sql
+        app.get("/rest/test", (req, res) ->{
+            List<Note> noteList = db.getNotesFromDB();
+
+            // send list to site
+            res.json(noteList);
+        });
+
+        // Path to HTML/CSS/JS
         try {
             app.use(Middleware.statics(Paths.get("www").toString()));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        // Port server is listening on
         app.listen(3000);
         System.out.println("Server listen on port 3000");
     }
