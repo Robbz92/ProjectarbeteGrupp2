@@ -157,4 +157,52 @@ public class Database {
             e.printStackTrace();
         }
     }
+    //DB categoriesDB categoriesDB categoriesDB categoriesDB categoriesDB
+    public void addCategoriesToDB(String content){
+        try{
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO categories (category) VALUES(?);");
+            stmt.setString(1, content);
+            stmt.executeUpdate();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void deleteCategoryFromDB(int categoryDataID){
+        try{
+            PreparedStatement stmt = conn.prepareStatement("DELETE FROM categories WHERE id = ?");
+            stmt.setInt(1, categoryDataID);
+            stmt.executeUpdate();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    public List<Categories> getcategoriesFromDB(){
+        List<Categories> categoryItems = new ArrayList<>();
+
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT id, category FROM categories");
+            ResultSet resultSet = stmt.executeQuery();
+
+            while(resultSet.next()){
+
+
+                int categoryId =resultSet.getInt("id");
+                String name = resultSet.getString("category");
+
+                Categories names = new Categories(categoryId,name);
+                System.out.println(names);
+                categoryItems.add(names);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return categoryItems;
+    }
+
 }

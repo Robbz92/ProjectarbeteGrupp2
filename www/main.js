@@ -5,7 +5,7 @@ let categoryID;
 // Add todoItem to db
 
 getJSON();
-
+getCategoryJSON();
 function addToDo(){
     let desc = document.querySelector("#ToDo");
 

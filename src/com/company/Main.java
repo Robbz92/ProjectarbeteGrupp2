@@ -81,6 +81,31 @@ public class Main {
             // return "/uploads/image-name.jpg
             res.send(imageUrl);
         });
+        // add Category items in sql
+        app.post("/rest/index", (req,res) ->{
+            String content = (String)req.getBody().get("text");
+            db.addCategoriesToDB(content);
+
+            res.send("Ok");
+        });
+
+        //delete category
+        app.post("/rest/index", (req, res) ->{
+            int categoryDataID = (int)req.getBody().get("id");
+            db.deleteCategoryFromDB(categoryDataID);
+
+            System.out.println("Removed dataID: " + categoryDataID);
+            res.send("Ok");
+        });
+        app.get("/rest/index", (req, res) ->{
+            List<Categories> categorysList = db.getcategoriesFromDB();
+
+            // send list to site
+            res.json(categorysList);
+            System.out.println("hämta category funkar");
+        });
+
+
 
         // will serve both the html/css/js files and the uploads folder
         try {
