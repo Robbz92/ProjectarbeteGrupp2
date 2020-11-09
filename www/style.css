@@ -91,7 +91,7 @@ div.main{
     padding-top: 100px;
     margin-left: 300px;
     display: grid;
-    grid-template-columns: 700px;
+    grid-template-columns: 680px;
     grid-column-gap: 0px;
 
 }
@@ -99,7 +99,9 @@ div.main{
 /*taking care of todo list*/
  div#todo{
      padding: 10px;
+     height: 600px;
      max-height: 600px;
+     max-width: 680px;
      overflow: scroll;
      grid-column: 1;
  }
@@ -107,8 +109,10 @@ div.main{
  div#filer{
      padding: 10px;
      border-left-style: solid;
-     border-left-color: black;
+     border-left-style: black;
+     height: 600px;
      max-height: 600px;
+     max-width: 915px;
      overflow: scroll;
      grid-column: 2;
  }
@@ -117,9 +121,8 @@ div.main{
      padding: 10px;
      border-top-style: solid;
      border-top-color: black;
-     max-width: 1614px; ;
+     max-width: 1600px; ;
      width: 1614px;
-     height: 250px;
      max-height: 250px;
      overflow: scroll;
     -ms-grid-column-span:3/2 ;
