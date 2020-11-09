@@ -1,4 +1,5 @@
 let myArr = [];
+let dataID;
 // Add todoItem to db
 
 getJSON();
@@ -44,14 +45,32 @@ function rendText(){
 
     for(let content of myArr){
         let textLi = `
-            <li id="li">
-                ${content.text}
-                
-                <span data-id="${content.id}"></span>
-            </li>
+         <li id="li">
+            ${content.text}
+        
+             <span class="close" id="myID" data-id="${content.id}">x</span>
+         </li>
         `;
         noteList.innerHTML += textLi;
     }
+     // remove item from span
+     $('.close').mousedown(function(event) { 
+        console.log('event',event.which);
+        switch (event.which) { 
+            case 1: dataID = parseInt(event.target.dataset.id); postDataID(); getJSON();
+            break;
+            default: console.log(`Sorry, we are out of index.`);
+        } 
+    }); 
+}
+
+async function postDataID(){
+    let dataIDJSON = JSON.stringify({id: dataID});
+
+    let result = await fetch("/rest/dataID", {
+        method: "POST",
+        body: dataIDJSON
+    });
 }
 
 
