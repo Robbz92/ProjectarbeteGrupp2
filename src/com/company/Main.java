@@ -11,11 +11,9 @@ import java.util.List;
 public class Main {
 
 
-
     public static void main(String[] args) {
         Database db = new Database();
         Express app = new Express();
-
 
         // add todoo items in sql
         app.post("/rest/notes", (req,res) ->{
@@ -24,7 +22,7 @@ public class Main {
 
             res.send("Ok");
         });
-
+        
         // Path to HTML/CSS/JS
         try {
             app.use(Middleware.statics(Paths.get("www").toString()));
@@ -76,7 +74,7 @@ public class Main {
 
 
         // Port server is listening on
-        app.listen(3000);
-        System.out.println("Server listen on port 3000");
+        app.listen(4000);
+        System.out.println("Server listen on port 4000");
     }
 }

@@ -35,10 +35,20 @@
 
             </div>
             <div id="bilder">
-                <h3>My Pictures</h3>
-                <button id="addPics">ADD PICS</button>
+                
+                   <form onsubmit="createPost(event)">
+                    <h3>My Pictures</h3>
+                            <input id="title" required type="text" placeholder="title">
+                            <textarea id="content" required placeholder="content" cols="30" rows="10"></textarea>
+                            <input type="file" accept="image/*" placeholder="select image">
+                            <button id="addPics" type="submit">ADD PICS</button>
+                        </form>
+               <!--  <button id="addPics">ADD PICS</button> -->
 
             </div>
+            <br>
+            <br>
+               <ul id="post-list"></ul>
         </div>
     </main>  
 </body>
