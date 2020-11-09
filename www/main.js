@@ -1,5 +1,7 @@
 let myArr = [];
 let dataID;
+let myCategoryArr=[];
+let categoryID;
 // Add todoItem to db
 
 getJSON();
@@ -77,12 +79,21 @@ async function postDataID(){
 const categoryInput= document.querySelector('.category-input');
 const categoryList= document.querySelector('.category-list');
 
-var categoryID=1;
+
 
 
 function addCategory(){
     
     //create a new category
+    
+
+    if(categoryInput.value == ""){
+        alert("You need to enter a text!");
+    }
+    else{
+        categoryPOSTJSON(categoryInput.value)
+    }
+    console.log("hallå")
 const categoryDiv= document.createElement('div');
 categoryDiv.classList.add("category");
 
@@ -93,13 +104,65 @@ categoryDiv.appendChild(newCategory);
 
 categoryList.appendChild(categoryDiv);
 
-newCategory.id=categoryID;
-
-
-
-categoryID++;
 
 categoryInput.value= "";
 
 
 }
+async function categoryPOSTJSON(categoryInput){
+    // the text is the key that we use to fetch the json text with
+    let categoryObjJSON = JSON.stringify({text: categoryInput});
+
+    // send object to /rest/notes
+    let result = await fetch("/rest/index", {
+        method: "POST",
+        body: categoryObjJSON
+    });
+
+    // Continue here to fetch a JSON object from db..
+    getCategoryJSON();
+}
+async function getCategoryJSON(){
+    console.log("tjoho")
+    let result = await fetch("/rest/index");
+
+    content = await result.json();
+    myCategoryArr = content;
+
+    console.log(myCategoryArr);
+
+    rendCategories();
+}
+function rendCategories(){
+    newCategoryList = document.querySelector(".category-list");
+    newCategoryList.innerHTML = "";
+
+    for(let categoryContent of myCategoryArr){
+        let categoryLi = `
+         <li>
+            ${categoryContent.category}
+        
+             <span class="categoryClose" data-id="${categoryContent.id}">x</span>
+         </li>
+        `;
+        newCategoryList.innerHTML += categoryLi;
+    }
+      // remove item from span
+      $('.categoryClose').mousedown(function(event) { 
+        console.log('event',event.which);
+        switch (event.which) { 
+            case 1: categoryDataID = parseInt(event.target.dataset.id); postCategoryDataID(); getCategoryJSON();
+            break;
+            default: console.log(`Sorry, we are out of index.`);
+        } 
+    });
+    
+}
+        async function postCategoryDataID(){
+            let categoryDataIDJSON = JSON.stringify({id: categoryID});
+        
+            let result = await fetch("/rest/index", {
+                method: "POST",
+                body: categoryDataIDJSON
+            });
+        }
