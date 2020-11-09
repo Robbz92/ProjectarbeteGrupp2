@@ -1,6 +1,13 @@
 package com.company;
 
 import express.utils.Utils;
+import org.apache.commons.fileupload.FileItem;
+
+import java.io.FileOutputStream;
+import java.nio.file.Paths;
+import java.sql.*;
+import java.time.Instant;
+import express.utils.Utils;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -30,6 +37,98 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+    public String uploadImage(FileItem image) {
+              // get filename with file.getName()
+        String imageUrl = "/pictures/" + image.getName();
+
+        // open an ObjectOutputStream with the path to the pictures folder in the "www" directory
+        try (var os = new FileOutputStream(Paths.get("www" + imageUrl).toString())) {
+            // get the required byte[] array to save to a file
+            // with file.get()
+            os.write(image.get());
+        } catch (Exception e) {
+            e.printStackTrace();
+            // if image is not saved, return null
+            return null;
+        }
+        return imageUrl;
+    }
+
+    // replace whole entity in database with updated post.
+    // the post must have an ID
+    public void updatePost(postedPictures post) {
+        // validate post ID (present and exists in database)
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE posts SET title = ?, content = ?, imageUrl = ?, dateTime = ?, category = ? WHERE id = ?");
+            stmt.setString(1, post.getTitle());
+            stmt.setString(2, post.getContent());
+            stmt.setString(3, post.getImageUrl());
+            stmt.setLong(4, post.getDateTime());
+            stmt.setInt(5,post.getCategory());
+            stmt.setInt(6, post.getId());
+
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<postedPictures> getPosts() {
+        List<postedPictures> posts = null;
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM pictures");
+            ResultSet rs = stmt.executeQuery();
+
+            postedPictures[] usersFromRS = (postedPictures[]) Utils.readResultSetToObject(rs, postedPictures[].class);
+            posts = List.of(usersFromRS);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return posts;
+    }
+
+    public postedPictures getPostById(int id) {
+        postedPictures post = null;
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM pictures WHERE id = ?");
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            // ResultSet is always an array of items
+            postedPictures[] userFromRS = (postedPictures[]) Utils.readResultSetToObject(rs, postedPictures[].class);
+
+            post = userFromRS[0];
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return post;
+    }
+
+    public void createPost(postedPictures post) {
+        try {
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO pictures (title, content, imageUrl, dateTime, category) VALUES(?, ?, ?, ?,?)");
+            stmt.setString(1, post.getTitle());
+            stmt.setString(2, post.getContent());
+            stmt.setString(3, post.getImageUrl());
+            stmt.setLong(4, Instant.now().toEpochMilli());
+            stmt.setInt(5,post.getCategory());
+
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public List<Note> getNotesFromDB(){
         List<Note> notes = new ArrayList<>();
