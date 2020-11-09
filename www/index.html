@@ -1,32 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+
+
+    <link href="style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lemonada&display=swap" rel="stylesheet">
+
+    
 </head>
+
 <body>
     <header>
-        <a>PIM</a> <!--logo-->
+        <a>PIM</a>
+        <!--logo-->
         <input type="text" placeholder="search">
     </header>
     <main>
         <div class="sidenav">
-            <input type="text" class="category-input" placeholder="skriv ner your kategori">
-            <button id="add_category"onclick="addCategory()">add</button>
+            <div class="make_cat" Z¨>
+                <input type="text" class="category-input" placeholder="skriv ner your kategori">
+                <button id="add_category" onclick="addCategory()">add</button>
+            </div>
             <ul class="category-list">
                 <div class="category">
-                <li>All categorys</li>
-            </div>
+                    <li onclick="filterOut()" id="all" class="category-item">All categorys</li>
+                </div>
             </ul>
         </div>
         <!--stuff in the middle-->
         <div class="main">
             <div id="todo">
                 <h3>My Todo list</h3>
-                <input id="ToDo" type="text"placeholder="type your goals">
+                <input id="ToDo" type="text" placeholder="type your goals">
                 <button id="ToDo_add" onclick="addToDo()">add to list</button>
+
+
                 <ul id = "myList">
                     <li id="li">
 
@@ -40,12 +52,19 @@
             </div>
             <div id="bilder">
                 <h3>My Pictures</h3>
+                <input id="title" type="text" placeholder="title">
+                <input id="content" type="text" placeholder="content">
                 <button id="addPics">ADD PICS</button>
-
+                <button id="addFile">ADD FILE</button>
             </div>
         </div>
     </main>
+
     <script src="main.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 </body>
+
+
+
 </html>
