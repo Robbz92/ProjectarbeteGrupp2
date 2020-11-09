@@ -1,24 +1,132 @@
+/*no ugly points on list*/
+li{
+    list-style-type: none;
+}
+/*no ugly scroll bar*/
+::-webkit-scrollbar{
+    display: none;
+}
 
 
-div.sidenav{
+body{
+    margin: 0px;
+    font-family:'lemonada';
+}
+/*fixing header / search/ logo */
+header{
+    margin: 0px;
+    padding-top: 0px ;
     position: fixed;
+    background-color:#222222;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+    border-bottom-width:5px;
+    width: 100%;
+    height:100px;
+    } 
+
+/*taking care of categorys*/
+
+div.make_cat{
+  background-color:silver;
+  border-bottom-style: solid;
+  border-bottom-color: #222222;
 
 }
+input.category-input{
+    width: 200px;
+    height: 50px;
+    border:0px;
+    margin: 0px;
+    padding: 0px;
+}
+div.make_cat>button{
+    cursor: pointer;
+    height: 50px;
+    width: 94px;
+    border:0px;
+    margin: 0px;
+    padding: 0px;
+}
+div.sidenav{
+    width: 300px;
+    position: fixed;
+    margin-top: 105px;
+    border-right-style: solid;
+    border-right-width: 3,5px;
+    border-right-color: black;
+    height: 90%;    
+    background-color:white;
+    overflow:scroll;
+
+    }
+ul.category-list{
+    max-width: 300px;
+    margin: 0px;
+    padding: 0px;
+
+    
+}   
+
+div.category>li:hover{
+    color: white;
+    background-color:#222222;
+}
+li.category-item{
+
+  color:black;
+  cursor: pointer;
+  position: relative;
+  padding: 15px 10px 15px 10px;
+  background:white;
+  font-size: 25px;
+  border-bottom-style: solid;
+  border-bottom-color:#222222;
+  font-weight: bold;
+  overflow: scroll;
+} 
+
+/*taking care of middle stuff*/
 div.main{
+    padding-top: 100px;
     margin-left: 300px;
-}
-.category li{
-
-font-family: Arial Black;
-
-list-style-type: none;
-
-font-size: 200%;
+    display: grid;
+    grid-template-columns: 700px;
+    grid-column-gap: 0px;
 
 }
-li:hover{
 
-font-size: 215%;
-color: green;
+/*taking care of todo list*/
+ div#todo{
+     padding: 10px;
+     max-height: 600px;
+     overflow: scroll;
+     grid-column: 1;
+ }
 
-}
+ div#filer{
+     padding: 10px;
+     border-left-style: solid;
+     border-left-color: black;
+     max-height: 600px;
+     overflow: scroll;
+     grid-column: 2;
+ }
+
+ div#bilder{
+     padding: 10px;
+     border-top-style: solid;
+     border-top-color: black;
+     max-width: 1614px; ;
+     width: 1614px;
+     height: 250px;
+     max-height: 250px;
+     overflow: scroll;
+    -ms-grid-column-span:3/2 ;
+ }
+
+
+
+
+
+
