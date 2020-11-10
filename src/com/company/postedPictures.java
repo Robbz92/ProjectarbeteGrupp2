@@ -68,6 +68,7 @@ public postedPictures(){}
         this.category = category;
     }
 
+
     @Override
     public String toString() {
         return "postedPictures{" +

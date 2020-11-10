@@ -211,7 +211,7 @@ public class Database {
                 Categories names = new Categories(categoryId,name);
                 System.out.println(names);
                 categoryItems.add(names);
-            }
+            } 
 
         } catch (Exception e) {
             e.printStackTrace();
