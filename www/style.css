@@ -1,3 +1,4 @@
+
 /*no ugly points on list*/
 li{
     list-style-type: none;
@@ -128,6 +129,7 @@ div.main{
      overflow: scroll;
     -ms-grid-column-span:3/2 ;
  }
+
 
 
 
