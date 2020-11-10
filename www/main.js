@@ -1,11 +1,21 @@
 let myArr = [];
 let dataID;
 let myCategoryArr=[];
-let categoryID;
+let categoryDataID;
+
 // Add todoItem to db
 
+/*
+if(categoryDataID = 1){
+    getCatagoryJSON(); // display todo items
+}
+*/
 getJSON();
-getCategoryJSON();
+//getJSON();
+getCategoryJSON(); // display current categorys
+
+
+// sends text from textbox with button to db
 function addToDo(){
     let desc = document.querySelector("#ToDo");
 
@@ -47,10 +57,10 @@ function rendText(){
 
     for(let content of myArr){
         let textLi = `
-         <li id="li">
+         <li class="close">
             ${content.text}
         
-             <span class="close" id="myID" data-id="${content.id}">x</span>
+             <span id="myID" data-id="${content.id}">x</span>
          </li>
         `;
         noteList.innerHTML += textLi;
@@ -81,11 +91,10 @@ const categoryList= document.querySelector('.category-list');
 
 
 
-
+// for new category
 function addCategory(){
     
     //create a new category
-    
 
     if(categoryInput.value == ""){
         alert("You need to enter a text!");
@@ -139,14 +148,23 @@ function rendCategories(){
 
     for(let categoryContent of myCategoryArr){
         let categoryLi = `
-         <li>
+         <li class="category-item" data-id="${categoryContent.categoryID}">
             ${categoryContent.category}
-        
-             <span class="categoryClose" data-id="${categoryContent.id}">x</span>
+               
+             <span class="categoryClose" data-id="${categoryContent.categoryID}">x</span>
          </li>
         `;
+        
         newCategoryList.innerHTML += categoryLi;
     }
+     
+     $('.category-item').mousedown(function(event) { 
+        console.log('event',event.which);
+        switch (event.which) { 
+            case 1: categoryDataID = parseInt(event.target.dataset.id); sendCatagoryDataID();
+            break;
+        } 
+    });
       // remove item from span
       $('.categoryClose').mousedown(function(event) { 
         console.log('event',event.which);
@@ -158,11 +176,74 @@ function rendCategories(){
     });
     
 }
-        async function postCategoryDataID(){
-            let categoryDataIDJSON = JSON.stringify({id: categoryID});
+// delete category
+async function postCategoryDataID(){
+    let categoryDataIDJSON = JSON.stringify({id: categoryDataID});
+
+    let result = await fetch("/rest/index2", {
+        method: "POST",
+        body: categoryDataIDJSON
+    });
+}
+
+// skickar id på den text man trycker på (categorys)
+async function sendCatagoryDataID(){
+    let categoryDataIDJSON = JSON.stringify({id: categoryDataID});
+    let result = await fetch("/rest/currID", {
+        method: "POST",
+        body: categoryDataIDJSON
+    });
+    getCatagoryJSON();
+}
+
+async function getCatagoryJSON(){
+    if(categoryDataID == 1){
+        let result = await fetch("/rest/test");
+
+        content = await result.json();
+        myArr = content
+    
+        console.log(myArr);
+    
+        //rendSelectiveText();
+        rendText();
+    }
+    else{
+        let result = await fetch("/rest/appet");
+
+        content = await result.json();
+        myArr = content
+    
+        console.log(myArr);
+    
+        //rendSelectiveText();
+        rendText();
+    }
+ 
+}
+/*
+function rendSelectiveText(){
+    noteList = document.querySelector("#myList");
+    noteList.innerHTML = "";
+
+    for(let content of myArr){
+        let textLi = `
+         <li class="some">
+            ${content.text}
         
-            let result = await fetch("/rest/index", {
-                method: "POST",
-                body: categoryDataIDJSON
-            });
-        }
+             <span id="myID" data-id="${content.id}">x</span>
+         </li>
+        `;
+        noteList.innerHTML += textLi;
+    }
+     // remove item from span
+     $('.some').mousedown(function(event) { 
+        console.log('event',event.which);
+        switch (event.which) { 
+            case 1: dataID = parseInt(event.target.dataset.id); postDataID(); getCatagoryJSON();
+            break;
+            default: console.log(`Sorry, we are out of index.`);
+        } 
+    }); 
+}
+*/

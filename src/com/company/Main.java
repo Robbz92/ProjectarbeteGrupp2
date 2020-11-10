@@ -11,16 +11,29 @@ import java.util.List;
 public class Main {
 
 
-
+    static int categoryID;
     public static void main(String[] args) {
+
         Database db = new Database();
         Express app = new Express();
 
 
+        app.post("/rest/currID", (req, res) ->{
+            categoryID = (int)req.getBody().get("id");
+
+            res.send("ok");
+        });
+
+        app.get("/rest/appet", (req, res) ->{
+            List<Note> noteList = db.getSelectiveText(categoryID);
+            res.json(noteList);
+        });
+
         // add todoo items in sql
         app.post("/rest/notes", (req,res) ->{
             String content = (String)req.getBody().get("text");
-            db.addContentToDB(content);
+            System.out.println(categoryID);
+            db.addContentToDB(content, categoryID);
 
             res.send("Ok");
         });
@@ -48,7 +61,7 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//Add pictures
+        //Add pictures
         app.get("/rest/posts", (req, res) -> {
             List<postedPictures> posts = db.getPosts();
             res.json(posts);
@@ -90,11 +103,11 @@ public class Main {
         });
 
         //delete category
-        app.post("/rest/index", (req, res) ->{
+        app.post("/rest/index2", (req, res) ->{
             int categoryDataID = (int)req.getBody().get("id");
+            System.out.println(categoryDataID);
             db.deleteCategoryFromDB(categoryDataID);
 
-            System.out.println("Removed dataID: " + categoryDataID);
             res.send("Ok");
         });
         app.get("/rest/index", (req, res) ->{
@@ -102,9 +115,7 @@ public class Main {
 
             // send list to site
             res.json(categorysList);
-            System.out.println("hämta category funkar");
         });
-
 
 
         // will serve both the html/css/js files and the uploads folder
@@ -113,8 +124,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
 
 
         // Port server is listening on
