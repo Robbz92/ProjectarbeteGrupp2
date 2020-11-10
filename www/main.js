@@ -331,3 +331,4 @@ function rendSelectiveText(){
         console.log(await result.text());
     }
 }
+
