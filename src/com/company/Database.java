@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class Database {
     private Connection conn;
+    private int getCategoryID;
+
 
     public Database(){
         try {
@@ -27,11 +29,13 @@ public class Database {
         }
     }
 
-    public void addContentToDB(String content){
+    public void addContentToDB(String content, int categoryID){
         try{
-            PreparedStatement stmt = conn.prepareStatement("INSERT INTO todos (text) VALUES(?);");
+            PreparedStatement stmt = conn.prepareStatement("INSERT INTO todos (text,category) VALUES(?,?);");
             stmt.setString(1, content);
+            stmt.setInt(2, categoryID);
             stmt.executeUpdate();
+
         }
         catch(Exception e){
             e.printStackTrace();
@@ -128,8 +132,6 @@ public class Database {
         }
     }
 
-
-
     public List<Note> getNotesFromDB(){
         List<Note> notes = new ArrayList<>();
 
@@ -144,6 +146,22 @@ public class Database {
             e.printStackTrace();
         }
 
+        return notes;
+    }
+
+    public List<Note> getSelectiveText(int dataID){
+        List<Note> notes = new ArrayList<>();
+        try{
+            PreparedStatement stmt = conn.prepareStatement("SELECT text FROM todos, categories WHERE categories.id = ? AND todos.category = categories.id order by categories.category DESC;");
+            stmt.setInt(1, dataID);
+            ResultSet resultSet = stmt.executeQuery();
+
+            Note[] note = (Note[]) Utils.readResultSetToObject(resultSet, Note[].class);
+            notes = List.of(note);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         return notes;
     }
 
@@ -187,16 +205,14 @@ public class Database {
             ResultSet resultSet = stmt.executeQuery();
 
             while(resultSet.next()){
-
-
                 int categoryId =resultSet.getInt("id");
                 String name = resultSet.getString("category");
 
                 Categories names = new Categories(categoryId,name);
                 System.out.println(names);
                 categoryItems.add(names);
-
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -204,5 +220,4 @@ public class Database {
 
         return categoryItems;
     }
-
 }

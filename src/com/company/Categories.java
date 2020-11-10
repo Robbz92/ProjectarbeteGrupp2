@@ -1,11 +1,9 @@
 package com.company;
 
-import jdk.jfr.Category;
 
 public class Categories {
     private int categoryID;
     private String category;
-
 
     public Categories(int categoryID, String category){
 
