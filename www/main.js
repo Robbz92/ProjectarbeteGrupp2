@@ -4,8 +4,6 @@ let myCategoryArr=[];
 let categoryDataID;
 
 // Add todoItem to db
-
-getJSON();
 getCategoryJSON(); // display current categorys
 
 
@@ -18,7 +16,8 @@ function addToDo(){
     }
     else{
         POSTJSON(desc.value, "/rest/notes");
-        getJSON();
+        //getJSON();
+        getCatagoryJSON();
     }
 }
 
@@ -33,6 +32,7 @@ async function POSTJSON(value, path) {
     return await result.json();
 }
 
+// Do not touch, we need this to rend text correctly.
 async function getJSON(){
     let result = await fetch("/rest/test");
 
@@ -113,7 +113,7 @@ function addCategory(){
 }
 async function getCategoryJSON(){
     if(categoryDataID == 1){
-        alert("You cannot delete All category")
+        alert("You cannot delete all categories");
     }
     else{
         let result = await fetch("/rest/index");
@@ -154,7 +154,7 @@ function rendCategories(){
       $('.categoryClose').mousedown(function(event) { 
         console.log('event',event.which);
         switch (event.which) { 
-            case 1: categoryDataID = parseInt(event.target.dataset.id); POSTJSON(categoryDataID, "/rest/index2"); getCategoryJSON();
+            case 1: categoryDataID = parseInt(event.target.dataset.id); postCategoryDataID(); getCategoryJSON();
             break;
             default: console.log(`Sorry, we are out of index.`);
         } 
@@ -162,6 +162,14 @@ function rendCategories(){
     
 }
 // delete category
+async function postCategoryDataID(){
+    let categoryDataIDJSON = JSON.stringify({id: categoryDataID});
+
+    let result = await fetch("/rest/index2", {
+        method: "POST",
+        body: categoryDataIDJSON
+    });
+}
 
 // skickar id på den text man trycker på (categorys)
 async function sendCatagoryDataID(){
@@ -174,6 +182,7 @@ async function sendCatagoryDataID(){
 }
 
 async function getCatagoryJSON(){
+
     if(categoryDataID == 1){
         let result = await fetch("/rest/test");
 
@@ -184,6 +193,7 @@ async function getCatagoryJSON(){
     
         rendSelectiveText();
     }
+    
     else{
         let result = await fetch("/rest/appet");
 
@@ -218,6 +228,7 @@ function rendSelectiveText(){
             default: console.log(`Sorry, we are out of index.`);
         } 
     }); 
+}
 
 
 //Hantering av bilder
@@ -302,4 +313,6 @@ function rendSelectiveText(){
         console.log(await result.text());
     }
 }
-
+function filterOut(){
+    getJSON();
+}
