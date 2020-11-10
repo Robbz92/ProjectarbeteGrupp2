@@ -10,7 +10,7 @@
     <link href="style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lemonada&display=swap" rel="stylesheet">
 
-    
+
 </head>
 
 <body>
@@ -25,9 +25,10 @@
                 <input type="text" class="category-input" placeholder="skriv ner your kategori">
                 <button id="add_category" onclick="addCategory()">add</button>
             </div>
-            <ul class="category-list" >
+            <li onclick="filterOut()" id="all" class="category-item">All categorys</li>
+            <ul class="category-list">
                 <div class="category">
-                    <li onclick="filterOut()" id="all" class="category-item">All categorys</li>
+
                 </div>
             </ul>
         </div>
@@ -39,7 +40,7 @@
                 <button id="ToDo_add" onclick="addToDo()">add to list</button>
 
 
-                <ul id = "myList">
+                <ul id="myList">
                     <li id="li">
 
                     </li>
@@ -51,11 +52,13 @@
 
             </div>
             <div id="bilder">
+                <form onsubmit="createPost(event)"></form>
                 <h3>My Pictures</h3>
-                <input id="title" type="text" placeholder="title">
-                <input id="content" type="text" placeholder="content">
-                <button id="addPics">ADD PICS</button>
-                <button id="addFile">ADD FILE</button>
+                <input id="title" required type="text" placeholder="title">
+                <textarea id="content" required placeholder="content" cols="30" rows="10"></textarea>
+                <input type="file" accept="image/*" placeholder="select image">
+                <button type="submit">UPPLOAD PICTURE</button>
+                </form>
             </div>
         </div>
     </main>
