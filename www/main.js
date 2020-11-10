@@ -5,13 +5,7 @@ let categoryDataID;
 
 // Add todoItem to db
 
-/*
-if(categoryDataID = 1){
-    getCatagoryJSON(); // display todo items
-}
-*/
 getJSON();
-//getJSON();
 getCategoryJSON(); // display current categorys
 
 
@@ -23,21 +17,20 @@ function addToDo(){
         alert("You need to enter a text!");
     }
     else{
-        POSTJSON(desc.value)
+        POSTJSON(desc.value, "/rest/notes");
+        getJSON();
     }
 }
-async function POSTJSON(desc){
-    // the text is the key that we use to fetch the json text with
-    let objJSON = JSON.stringify({text: desc});
 
-    // send object to /rest/notes
-    let result = await fetch("/rest/notes", {
+async function POSTJSON(value, path) {
+
+    const json = JSON.stringify({text: value});
+    const result = await fetch(path, {
         method: "POST",
-        body: objJSON
+        body: json
     });
-
-    // Continue here to fetch a JSON object from db..
-    getJSON();
+    
+    return await result.json();
 }
 
 async function getJSON(){
@@ -100,48 +93,40 @@ function addCategory(){
         alert("You need to enter a text!");
     }
     else{
-        categoryPOSTJSON(categoryInput.value)
+        POSTJSON(categoryInput.value, "/rest/index");
+        getCategoryJSON()
     }
     console.log("hallå")
-const categoryDiv= document.createElement('div');
-categoryDiv.classList.add("category");
+    const categoryDiv= document.createElement('div');
+    categoryDiv.classList.add("category");
 
-const newCategory=document.createElement('li');
-newCategory.innerText=categoryInput.value;
-newCategory.classList.add('category-item');
-categoryDiv.appendChild(newCategory);
+    const newCategory=document.createElement('li');
+    newCategory.innerText=categoryInput.value;
+    newCategory.classList.add('category-item');
+    categoryDiv.appendChild(newCategory);
 
-categoryList.appendChild(categoryDiv);
+    categoryList.appendChild(categoryDiv);
+
+    categoryInput.value= "";
 
 
-categoryInput.value= "";
-
-
-}
-async function categoryPOSTJSON(categoryInput){
-    // the text is the key that we use to fetch the json text with
-    let categoryObjJSON = JSON.stringify({text: categoryInput});
-
-    // send object to /rest/notes
-    let result = await fetch("/rest/index", {
-        method: "POST",
-        body: categoryObjJSON
-    });
-
-    // Continue here to fetch a JSON object from db..
-    getCategoryJSON();
 }
 async function getCategoryJSON(){
-    console.log("tjoho")
-    let result = await fetch("/rest/index");
+    if(categoryDataID == 1){
+        alert("You cannot delete All category")
+    }
+    else{
+        let result = await fetch("/rest/index");
 
-    content = await result.json();
-    myCategoryArr = content;
+        content = await result.json();
+        myCategoryArr = content;
 
-    console.log(myCategoryArr);
+        console.log(myCategoryArr);
 
-    rendCategories();
+        rendCategories();
+    }
 }
+
 function rendCategories(){
     newCategoryList = document.querySelector(".category-list");
     newCategoryList.innerHTML = "";
@@ -169,7 +154,7 @@ function rendCategories(){
       $('.categoryClose').mousedown(function(event) { 
         console.log('event',event.which);
         switch (event.which) { 
-            case 1: categoryDataID = parseInt(event.target.dataset.id); postCategoryDataID(); getCategoryJSON();
+            case 1: categoryDataID = parseInt(event.target.dataset.id); POSTJSON(categoryDataID, "/rest/index2"); getCategoryJSON();
             break;
             default: console.log(`Sorry, we are out of index.`);
         } 
@@ -177,14 +162,6 @@ function rendCategories(){
     
 }
 // delete category
-async function postCategoryDataID(){
-    let categoryDataIDJSON = JSON.stringify({id: categoryDataID});
-
-    let result = await fetch("/rest/index2", {
-        method: "POST",
-        body: categoryDataIDJSON
-    });
-}
 
 // skickar id på den text man trycker på (categorys)
 async function sendCatagoryDataID(){
@@ -205,8 +182,7 @@ async function getCatagoryJSON(){
     
         console.log(myArr);
     
-        //rendSelectiveText();
-        rendText();
+        rendSelectiveText();
     }
     else{
         let result = await fetch("/rest/appet");
@@ -216,12 +192,10 @@ async function getCatagoryJSON(){
     
         console.log(myArr);
     
-        //rendSelectiveText();
-        rendText();
+        rendSelectiveText();
     }
- 
 }
-/*
+
 function rendSelectiveText(){
     noteList = document.querySelector("#myList");
     noteList.innerHTML = "";
@@ -230,12 +204,12 @@ function rendSelectiveText(){
         let textLi = `
          <li class="some">
             ${content.text}
-        
-             <span id="myID" data-id="${content.id}">x</span>
+             <span id="newID" data-id="${content.id}">x</span>
          </li>
         `;
         noteList.innerHTML += textLi;
     }
+
      // remove item from span
      $('.some').mousedown(function(event) { 
         console.log('event',event.which);
@@ -245,5 +219,5 @@ function rendSelectiveText(){
             default: console.log(`Sorry, we are out of index.`);
         } 
     }); 
+    
 }
-*/

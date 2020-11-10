@@ -152,7 +152,7 @@ public class Database {
     public List<Note> getSelectiveText(int dataID){
         List<Note> notes = new ArrayList<>();
         try{
-            PreparedStatement stmt = conn.prepareStatement("SELECT text FROM todos, categories WHERE categories.id = ? AND todos.category = categories.id order by categories.category DESC;");
+            PreparedStatement stmt = conn.prepareStatement("SELECT todos.text, todos.id FROM todos, categories WHERE categories.id = ? AND todos.category = categories.id order by categories.category DESC;");
             stmt.setInt(1, dataID);
             ResultSet resultSet = stmt.executeQuery();
 
