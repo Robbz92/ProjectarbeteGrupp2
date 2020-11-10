@@ -329,6 +329,7 @@ function rendSelectiveText(){
         posts.push(post);
         renderPosts();
         console.log(await result.text());
+
     }
 }
 
