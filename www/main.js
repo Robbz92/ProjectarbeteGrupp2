@@ -4,14 +4,6 @@ let myCategoryArr=[];
 let categoryDataID;
 
 // Add todoItem to db
-
-/*
-if(categoryDataID = 1){
-    getCatagoryJSON(); // display todo items
-}
-*/
-getJSON();
-//getJSON();
 getCategoryJSON(); // display current categorys
 
 
@@ -23,23 +15,25 @@ function addToDo(){
         alert("You need to enter a text!");
     }
     else{
-        POSTJSON(desc.value)
+        POSTJSON(desc.value, "/rest/notes");
+        //getJSON();
+        getCatagoryJSON();
     }
+    desc.value="";
 }
-async function POSTJSON(desc){
-    // the text is the key that we use to fetch the json text with
-    let objJSON = JSON.stringify({text: desc});
 
-    // send object to /rest/notes
-    let result = await fetch("/rest/notes", {
+async function POSTJSON(value, path) {
+
+    const json = JSON.stringify({text: value});
+    const result = await fetch(path, {
         method: "POST",
-        body: objJSON
+        body: json
     });
-
-    // Continue here to fetch a JSON object from db..
-    getJSON();
+    
+    return await result.json();
 }
 
+// Do not touch, we need this to rend text correctly.
 async function getJSON(){
     let result = await fetch("/rest/test");
 
@@ -100,48 +94,40 @@ function addCategory(){
         alert("You need to enter a text!");
     }
     else{
-        categoryPOSTJSON(categoryInput.value)
+        POSTJSON(categoryInput.value, "/rest/index");
+        getCategoryJSON()
     }
     console.log("hallå")
-const categoryDiv= document.createElement('div');
-categoryDiv.classList.add("category");
+    const categoryDiv= document.createElement('div');
+    categoryDiv.classList.add("category");
 
-const newCategory=document.createElement('li');
-newCategory.innerText=categoryInput.value;
-newCategory.classList.add('category-item');
-categoryDiv.appendChild(newCategory);
+    const newCategory=document.createElement('li');
+    newCategory.innerText=categoryInput.value;
+    newCategory.classList.add('category-item');
+    categoryDiv.appendChild(newCategory);
 
-categoryList.appendChild(categoryDiv);
+    categoryList.appendChild(categoryDiv);
+
+    categoryInput.value= "";
 
 
-categoryInput.value= "";
-
-
-}
-async function categoryPOSTJSON(categoryInput){
-    // the text is the key that we use to fetch the json text with
-    let categoryObjJSON = JSON.stringify({text: categoryInput});
-
-    // send object to /rest/notes
-    let result = await fetch("/rest/index", {
-        method: "POST",
-        body: categoryObjJSON
-    });
-
-    // Continue here to fetch a JSON object from db..
-    getCategoryJSON();
 }
 async function getCategoryJSON(){
-    console.log("tjoho")
-    let result = await fetch("/rest/index");
+    if(categoryDataID == 1){
+        alert("You cannot delete all categories");
+    }
+    else{
+        let result = await fetch("/rest/index");
 
-    content = await result.json();
-    myCategoryArr = content;
+        content = await result.json();
+        myCategoryArr = content;
 
-    console.log(myCategoryArr);
+        console.log(myCategoryArr);
 
-    rendCategories();
+        rendCategories();
+    }
 }
+
 function rendCategories(){
     newCategoryList = document.querySelector(".category-list");
     newCategoryList.innerHTML = "";
@@ -197,47 +183,46 @@ async function sendCatagoryDataID(){
 }
 
 async function getCatagoryJSON(){
+
     if(categoryDataID == 1){
         let result = await fetch("/rest/test");
 
         content = await result.json();
         myArr = content
-    
+
         console.log(myArr);
-    
-        //rendSelectiveText();
-        rendText();
+
+        rendSelectiveText();
     }
+
     else{
         let result = await fetch("/rest/appet");
 
         content = await result.json();
         myArr = content
-    
-        console.log(myArr);
-    
-        //rendSelectiveText();
-        rendText();
-    }
- 
 
-/*
+        console.log(myArr);
+
+        rendSelectiveText();
+    }
+}
+
 function rendSelectiveText(){
     noteList = document.querySelector("#myList");
     noteList.innerHTML = "";
 
     for(let content of myArr){
         let textLi = `
-         <li class="some">
+            <li class="some">
             ${content.text}
-        
-             <span id="myID" data-id="${content.id}">x</span>
-         </li>
+                <span id="newID" data-id="${content.id}">x</span>
+            </li>
         `;
         noteList.innerHTML += textLi;
     }
-     // remove item from span
-     $('.some').mousedown(function(event) { 
+
+        // remove item from span
+        $('.some').mousedown(function(event) { 
         console.log('event',event.which);
         switch (event.which) { 
             case 1: dataID = parseInt(event.target.dataset.id); postDataID(); getCatagoryJSON();
@@ -246,90 +231,110 @@ function rendSelectiveText(){
         } 
     }); 
 }
-*/
-
 
 //Hantering av bilder
 
-    let posts = [];
-    getPosts()
-    
-    async function getPosts() {
-        let result = await fetch('/rest/posts');
-        posts = await result.json();
-    
-        console.log(posts);
-    
-        renderPosts();
-    }
-    
-    function renderPosts() {
-        let postList = document.querySelector("#post-list");
-    
-        // clear list before update
-        postList.innerHTML = "";
-    
-        for(let post of posts) {
-            let date = new Date(post.timestamp).toLocaleString();
-    
-            let postLi = `
-                <li>
-                    <img src="${post.imageUrl}" alt="post-image">
-                    id: ${post.id} <br>
-                    published: ${date} <br>
-                    <h3>${post.title}</h3>
-    
-                    <p>${post.content}</p>
-                </li> <br>
-            `;
-    
-            postList.innerHTML += postLi;
-        }
-    
-    }
-    
-    async function createPost(e) {
-         e.preventDefault();
+// skapar array med posts
+let posts = [];
+getPosts();
 
-    
-        // upload image with FormData
-        let files = document.querySelector('input[type=file]').files;
-        let formData = new FormData();
-    
-        for(let file of files) {
-            formData.append('files', file, file.name);
-        }
-    
-        // upload selected files to server
-        let uploadResult = await fetch('/api/file-upload', {
-            method: 'POST',
-            body: formData
-        });
-    
-        // get the uploaded image url from response
-        let imageUrl = await uploadResult.text();
-    
-        let titleInput = document.querySelector('#title');
-        let contentInput = document.querySelector('#content');
-    console.log(titleInput);
-    
-        // create a post object containing values from inputs
-        // and the uploaded image url
-        let post = {
-            title: titleInput.value,
-            content: contentInput.value,
-            imageUrl: imageUrl
-        }
-    
-        let result = await fetch("/rest/posts", {
-            method: "POST",
-            body: JSON.stringify(post)
-        });
-    
-        posts.push(post);
-        renderPosts();
-        console.log(await result.text());
+async function getPosts(){
+    let result = await fetch('/rest/posts');
+    posts = await result.json();
 
-    }
+    console.log(posts);
+
+    renderPosts();
 }
 
+function renderPosts(){
+    let postList = document.querySelector("#post-list");
+    postList.innerHTML = "";
+
+    for(let post of posts){
+        let date = new Date(post.timestamp).toLocaleString();
+
+        let postLi = `
+            <li>
+                <br>
+                <img src="${post.imageUrl}" alt="post-image">
+                id: ${post.id} <br>
+                published: ${date} <br>
+                <h3>:${post.title}</h3>
+
+                <p>${post.content}</p><br>
+            </li> <br>
+        `;
+
+        postList.innerHTML += postLi;
+    }
+}
+
+async function createPost(e){
+    e.preventDefault();
+
+    // upload image, formdata
+    let files = document.querySelector('input[type=file]').files;
+    let fromData = new FormData();
+
+    for(let file of files){
+        fromData.append('files', file, file.name);
+    }
+
+    // upload selected files to server
+    let uploadResult = await fetch('/api/file-upload', {
+        method: 'POST',
+        body: fromData
+    });
+
+    let imageUrl = await uploadResult.text();
+
+    let titleInput = document.querySelector('#title');
+    let contentInput = document.querySelector('#content');
+
+    let post = {
+        title: titleInput.value,
+        content: contentInput.value,
+        imageUrl: imageUrl
+    }
+
+    let result = await fetch("/rest/posts", {
+        method: "POST",
+        body: JSON.stringify(post)
+    });
+
+    posts.push(post);
+
+    console.log(await result.text());
+}
+
+function filterOut(){
+    getJSON();
+}
+
+async function getTextPost(){
+    getTextContent();
+}
+
+async function getTextContent(){
+    let result = await fetch('/rest/textFile');
+    posts = await result.json();
+    myArr = posts;
+    console.log(posts);
+
+    rendTextFileContent();
+}
+
+function rendTextFileContent(){
+    noteList = document.querySelector("#textContent");
+    noteList.innerHTML = "";
+
+    for(let content of myArr){
+        let textLi = `
+         <li>
+            ${content}
+         </li>
+        `;
+        noteList.innerHTML += textLi;
+    }
+}

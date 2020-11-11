@@ -46,18 +46,27 @@
             </div>
             <div id="filer">
                 <h3>My Files</h3>
-                <button id="addFiles">ADD FILES</button>
+                <button id="addFiles" onclick="getTextPost()">View your file content</button>
+                <ul id= "textContent">
+                    <li>
+
+                    </li>
+                </ul>
 
             </div>
 
             <div id="bilder">
-                <form onsubmit="createPost(event)"></form>
+                <form onsubmit="createPost(event)">
                 <h3>My Pictures</h3>
-                <input id="title" required type="text" placeholder="title">
+                <input id="title" required type="text" placeholder="title" value="test">
                 <textarea id="content" required placeholder="content" cols="30" rows="10"></textarea>
                 <input type="file" accept="image/*" placeholder="select image">
                 <button type="submit">UPPLOAD PICTURE</button>
                 </form>
+                
+                <br>
+                <ul id ="post-list">
+                </ul>
             </div>
 
         </div>
