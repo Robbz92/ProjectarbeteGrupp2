@@ -3,20 +3,17 @@ package com.company;
 import express.Express;
 import express.middleware.Middleware;
 import org.apache.commons.fileupload.FileItem;
-
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.List;
 
 public class Main {
 
-
     static int categoryID;
     public static void main(String[] args) {
 
         Database db = new Database();
         Express app = new Express();
-
 
         app.post("/rest/currID", (req, res) ->{
             categoryID = (int)req.getBody().get("id");
@@ -32,7 +29,7 @@ public class Main {
         // add todoo items in sql
         app.post("/rest/notes", (req,res) ->{
             String content = (String)req.getBody().get("text");
-            System.out.println(categoryID);
+            //System.out.println(categoryID);
             db.addContentToDB(content, categoryID);
 
             res.send("Ok");
@@ -55,45 +52,6 @@ public class Main {
             res.send("Ok");
         });
 
-        // Path to HTML/CSS/JS
-        try {
-            app.use(Middleware.statics(Paths.get("www").toString()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //Add pictures
-        app.get("/rest/posts", (req, res) -> {
-            List<postedPictures> posts = db.getPosts();
-            res.json(posts);
-        });
-
-        app.get("/rest/posts/:id", (req, res) -> {
-            int id = Integer.parseInt(req.getParam("id"));
-
-            postedPictures post = db.getPostById(id);
-            res.json(post);
-        });
-
-        app.post("/rest/posts", (req, res) -> {
-            postedPictures post = (postedPictures) req.getBody(postedPictures.class);
-
-            db.createPost(post);
-            res.send("post OK");
-        });
-
-        app.post("/api/file-upload", (req, res) -> {
-            String imageUrl = null;
-
-            // extract the file from the FormData
-            try {
-                List<FileItem> files = req.getFormData("files");
-                imageUrl = db.uploadImage(files.get(0));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // return "/uploads/image-name.jpg
-            res.send(imageUrl);
-        });
         // add Category items in sql
         app.post("/rest/index", (req,res) ->{
             String content = (String)req.getBody().get("text");
@@ -105,7 +63,7 @@ public class Main {
         //delete category
         app.post("/rest/index2", (req, res) ->{
             int categoryDataID = (int)req.getBody().get("id");
-            System.out.println(categoryDataID);
+            //System.out.println(categoryDataID);
             db.deleteCategoryFromDB(categoryDataID);
 
             res.send("Ok");
@@ -117,6 +75,44 @@ public class Main {
             res.json(categorysList);
         });
 
+        // Hantering av db
+        app.get("/rest/posts", (req, res) ->{
+           List<BlogPost> posts = db.getPosts();
+           res.json(posts);
+        });
+
+        app.get("/rest/posts/:id", (req, res)->{
+            int id = Integer.parseInt(req.getParam("id"));
+
+            BlogPost post = db.getPostById(id);
+            res.json(post);
+        });
+
+        app.post("/rest/posts", (req, res) ->{
+            BlogPost post = (BlogPost) req.getBody(BlogPost.class);
+
+            db.createPost(post);
+            res.send("ok");
+        });
+
+        app.post("/api/file-upload", (req, res) ->{
+            String imageUrl = null;
+            try{
+                List<FileItem> files = req.getFormData("files");
+                imageUrl = db.uploadImage(files.get(0));
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            res.send(imageUrl);
+        });
+
+        // fetch textFile content
+        app.get("/rest/textFile", (req, res)->{
+            List<String> textContent = db.readFile();
+
+            res.json(textContent);
+        });
 
         // will serve both the html/css/js files and the uploads folder
         try {
@@ -124,7 +120,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         // Port server is listening on
         app.listen(3000);
