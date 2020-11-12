@@ -79,12 +79,12 @@ async function postDataID(){
     });
 }
 
-
+// END
 const categoryInput= document.querySelector('.category-input');
 const categoryList= document.querySelector('.category-list');
 
 
-
+// START
 // for new category
 function addCategory(){
     
@@ -97,20 +97,8 @@ function addCategory(){
         POSTJSON(categoryInput.value, "/rest/index");
         getCategoryJSON()
     }
-    console.log("hallå")
-    const categoryDiv= document.createElement('div');
-    categoryDiv.classList.add("category");
-
-    const newCategory=document.createElement('li');
-    newCategory.innerText=categoryInput.value;
-    newCategory.classList.add('category-item');
-    categoryDiv.appendChild(newCategory);
-
-    categoryList.appendChild(categoryDiv);
-
+   
     categoryInput.value= "";
-
-
 }
 async function getCategoryJSON(){
     if(categoryDataID == 1){
