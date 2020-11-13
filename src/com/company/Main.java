@@ -106,14 +106,7 @@ public class Main {
             }
             res.send(imageUrl);
         });
-
-        // fetch textFile content
-        app.get("/rest/textFile", (req, res)->{
-            List<String> textContent = db.readFile();
-
-            res.json(textContent);
-        });
-
+        
         // will serve both the html/css/js files and the uploads folder
         try {
             app.use(Middleware.statics(Paths.get("www").toString()));
