@@ -35,8 +35,6 @@
                 <input id="ToDo" type="text" placeholder="type your goals">
                 <button id="ToDo_add" onclick="addToDo()">add to list</button>
 
-
-
                 <ul id="myList">
 
                     <li id="li">
@@ -46,7 +44,14 @@
             </div>
             <div id="filer">
                 <h3>My Files</h3>
-                <button id="addFiles" onclick="getTextPost()">View your file content</button>
+                
+                 <input type="file" onclick="textFiles()" name="inputfile"
+                     id="inputfileID">
+                     
+                    <br> 
+                
+                    <pre id="output"></pre>
+
                 <ul id= "textContent">
                     <li>
 
