@@ -112,7 +112,7 @@ public class Main {
             int id  = Integer.parseInt(String.valueOf(req.getBody().get("id")));
             Note textFile= new Note();
             textFile.setId(id);
-            String str = db.readFile(textFile);
+            List<String> str = db.readFile(textFile);
             System.out.println(textFile);
 
             res.json(str);
