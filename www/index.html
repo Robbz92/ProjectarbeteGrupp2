@@ -40,7 +40,7 @@
                 <input id="ToDo" type="text" placeholder="type your goals">
                 <button id="ToDo_add" onclick="addToDo()">add to list</button>
 
-
+                
 
                 <ul id="myList">
 
@@ -58,6 +58,12 @@
                     </li>
                 </ul>
 
+                <input type="file" name="inputfile" onclick="textFiles()" id="inputfileID">
+
+                    <select id="dropDownID"></select>
+                    <br>
+                    <pre id="output"></pre>
+
             </div>
 
             <div id="bilder">
@@ -65,7 +71,7 @@
                 <h3>My Pictures</h3>
                 <input id="title" required type="text" placeholder="title" value="test">
                 <textarea id="content" required placeholder="content" cols="30" rows="10"></textarea>
-                <input type="file" accept="image/*" placeholder="select image">
+                <input id="imagesinput" type="file" accept="image/*" placeholder="select image">
                 <button type="submit">UPPLOAD PICTURE</button>
                 </form>
                 

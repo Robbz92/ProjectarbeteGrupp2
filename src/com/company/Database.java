@@ -9,10 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.Instant;
-import express.utils.Utils;
-
-import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -45,27 +43,23 @@ public class Database {
         }
     }
 
-    public List<Note> getNotesFromDB(){
-        List<Note> notes = new ArrayList<>();
-
-        try{
+    public List<Note> getNotesFromDB() {
+        try {
             PreparedStatement stmt = conn.prepareStatement("SELECT text, id FROM todos");
             ResultSet resultSet = stmt.executeQuery();
 
             Note[] note = (Note[]) Utils.readResultSetToObject(resultSet, Note[].class);
-            notes = List.of(note);
-
-        }catch(Exception e){
+            return List.of(note);
+        } catch(Exception e) {
             e.printStackTrace();
         }
-
-        return notes;
+        return new LinkedList<>();
     }
 
     public List<Note> getSelectiveText(int dataID){
         List<Note> notes = new ArrayList<>();
         try{
-            PreparedStatement stmt = conn.prepareStatement("SELECT text FROM todos, categories WHERE categories.id = ? AND todos.category = categories.id order by categories.category DESC;");
+            PreparedStatement stmt = conn.prepareStatement("SELECT text, todos.id FROM todos, categories WHERE categories.id = ? AND todos.category = categories.id order by categories.category DESC;");
             stmt.setInt(1, dataID);
             ResultSet resultSet = stmt.executeQuery();
 
@@ -186,16 +180,16 @@ public class Database {
 
     public String uploadImage(FileItem image){
         fileName = image.getName();
-        String imageUrl = "/pictures/" + image.getName();
+        Path path = Paths.get( "pictures", image.getName());
 
-        try(var os = new FileOutputStream(Paths.get("www" + imageUrl).toString())){
+        try(var os = new FileOutputStream(Paths.get("www").resolve(path).toString())){
             os.write(image.get());
         }
         catch(Exception e) {
             e.printStackTrace();
             return null;
         }
-        return imageUrl;
+        return path.toString();
     }
 
     public void updatePost(BlogPost post){
@@ -215,27 +209,37 @@ public class Database {
     //////////////////////////////////////////////////////////////
 
     // Hantera filer//
-    public List<String> readFile(){
-        List<String> test = null;
+    public String readFile(Note object){
+        System.out.println("readFile fungerar");
+        try{
+            PreparedStatement stmt= conn.prepareStatement("SELECT title FROM pictures WHERE id=?");
+            stmt.setInt(1,object.getId());
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                fileName = result.getString("title");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
 
+        }
+
+        System.out.println(fileName);
         if(fileName.equals("null")){
+
             return null;
         }
         else {
+            StringBuilder str = new StringBuilder();
             Path path = Paths.get("www/pictures/" + fileName);
-
-
-            test = new ArrayList<>();
-
             try {
                 List<String> lines = Files.readAllLines(path);
                 for (String allLines : lines) {
-                    test.add(allLines);
+                    str.append(allLines).append('\n');
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return str.toString();
         }
-        return test;
     }
 }
