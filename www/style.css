@@ -66,11 +66,9 @@ ul.category-list{
     max-width: 300px;
     margin: 0px;
     padding: 0px;
-
-    
-}   
-
-div.category>li:hover{
+}
+/*category list*/
+li.category-item:hover{
     color: white;
     background-color:#222222;
 }
@@ -81,12 +79,31 @@ li.category-item{
   position: relative;
   padding: 15px 10px 15px 10px;
   background:white;
-  font-size: 25px;
+  font-size: 22px;
   border-bottom-style: solid;
   border-bottom-color:#222222;
   font-weight: bold;
-  overflow: scroll;
-} 
+  }
+  li.category-item:active{
+      background-color:black;
+  }
+/*category list*/
+/*category "x" delete button*/
+span.categoryClose{
+    cursor: pointer;
+    color: rgb(148, 0, 0);
+    border-style: solid;
+    font-size: 14px;
+    padding-left:10px ;
+    padding-right: 10px;
+    margin-top: 6px;
+    border-radius:100px;
+    float: right;
+}
+span.categoryClose:hover{
+    color: rgb(255, 0, 0);
+    background-color: white;
+}
 
 /*taking care of middle stuff*/
 div.main{
@@ -107,7 +124,7 @@ div.main{
      overflow: scroll;
      grid-column: 1;
  }
-
+/*filer*/
  div#filer{
      padding: 10px;
      border-left-style: solid;
@@ -118,7 +135,7 @@ div.main{
      overflow: scroll;
      grid-column: 2;
  }
-
+/*bilder*/
  div#bilder{
      padding: 10px;
      border-top-style: solid;

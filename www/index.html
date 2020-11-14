@@ -21,16 +21,11 @@
     <main>
         <div class="sidenav">
             <div class="make_cat" Z¨>
-                <input type="text" class="category-input" placeholder="skriv ner your kategori">
+                <input maxlength="13" type="text" class="category-input" placeholder="can only name it with 13 input">
                 <button id="add_category" onclick="addCategory()">add</button>
             </div>
-
-            <li onclick="filterOut()" id="all" class="category-item">All categorys</li>
+            <li onclick="filterOut()" class="category-item">All categorys</li>
             <ul class="category-list">
-                <div class="category">
-
-
-                </div>
             </ul>
         </div>
         <!--stuff in the middle-->
@@ -39,8 +34,6 @@
                 <h3>My Todo list</h3>
                 <input id="ToDo" type="text" placeholder="type your goals">
                 <button id="ToDo_add" onclick="addToDo()">add to list</button>
-
-                
 
                 <ul id="myList">
 
@@ -51,7 +44,14 @@
             </div>
             <div id="filer">
                 <h3>My Files</h3>
-                <button id="addFiles" onclick="getTextPost()">View your file content</button>
+
+                 <!-- input type="file" onclick="textFiles()" name="inputfile"
+                     id="inputfileID" -->
+
+                    <br>
+
+                    <pre id="output"></pre>
+
                 <ul id= "textContent">
                     <li>
 

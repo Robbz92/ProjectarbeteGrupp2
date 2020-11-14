@@ -64,12 +64,12 @@ async function postDataID(){
     performPOST("/rest/dataID", JSON.stringify({id: dataID}));
 }
 
-
+// END
 const categoryInput= document.querySelector('.category-input');
 const categoryList= document.querySelector('.category-list');
 
 
-
+// START
 // for new category
 function addCategory(){
     
@@ -82,20 +82,8 @@ function addCategory(){
         performPOST("/rest/index", JSON.stringify({text: categoryInput.value}));
         getCategoryJSON()
     }
-    console.log("hallå")
-    const categoryDiv= document.createElement('div');
-    categoryDiv.classList.add("category");
-
-    const newCategory=document.createElement('li');
-    newCategory.innerText=categoryInput.value;
-    newCategory.classList.add('category-item');
-    categoryDiv.appendChild(newCategory);
-
-    categoryList.appendChild(categoryDiv);
 
     categoryInput.value= "";
-
-
 }
 async function getCategoryJSON(){
     if(categoryDataID == 1){
@@ -130,7 +118,7 @@ function rendCategories(){
         console.log('event',event.which);
         switch (event.which) { 
             case 1: {
-                categoryDataID = parseInt(event.target.dataset.id); 
+                categoryDataID = parseInt(event.target.dataset.id);
                 sendCatagoryDataID();
             }
             break;
@@ -258,7 +246,7 @@ async function createPost(e){
     }
 
     let result = await performPOST("/rest/posts", JSON.stringify(post), 'text');
-    
+
     posts.push(post);
 
     console.log(result);
@@ -281,55 +269,68 @@ function rendTextFileContent(){
    `;
 }
 
-getTextPosts();
+getTextPosts(); // todo check this
+function rendTextFileContent(){
+    noteList = document.querySelector("#textContent");
+    noteList.innerHTML = "";
+
+    for(let content of myArr){
+        let textLi = `
+         <li>
+            ${content}
+         </li>
+        `;
+        noteList.innerHTML += textLi;
+    }
+}
 async function textFiles(){
 
-    document.getElementById('inputfileID') 
-    .addEventListener('change', async function() { 
-        
-        var fr=new FileReader(); 
-        fr.onload=function(){ 
-            document.getElementById('output') 
-            .textContent=fr.result; 
-        } 
-        
-        fr.readAsText(this.files[0]); 
+    document.getElementById('inputfileID')
+    .addEventListener('change', async function() {
+
+        var fr=new FileReader();
+        fr.onload=function(){
+            document.getElementById('output')
+            .textContent=fr.result;
+        }
+
+        fr.readAsText(this.files[0]);
         var fileInput = document.getElementById('inputfileID');
         var textFilename = fileInput.files[0].name;
 
-        
+
 
         // upload image, formdata
         let files = document.querySelector('input[type=file]').files;
         let fromData = new FormData();
-    
+
         for(let file of files){
             fromData.append('files', file, textFilename);
         }
-        
-    
+
+
         // upload selected files to server
         let uploadResult = await fetch('/api/file-upload', {
             method: 'POST',
             body: fromData
         });
-    
+
         let imageUrl = await uploadResult.text();
-    
+
         let titleInput = textFilename;
-    
+
         let post = {
             title: titleInput,
             imageUrl: imageUrl
         }
-    
+
         let result = await fetch("/rest/posts", {
             method: "POST",
             body: JSON.stringify(post)
         });
-    
+
         posts.push(post);
-    
+
     });
     getTextPosts();
 }
@@ -351,7 +352,7 @@ function renderTextPosts(){
             <option class="testOptionClass" data-id=${post.id}>
             ${post.title}
             </option>
-            
+
         `;
 
         postList.innerHTML += postLi;
@@ -367,14 +368,14 @@ async function postTextFileID(){
     rendTextFileContent();
 }
 
-async function performPOST(path, data, return_type=null) {   
+async function performPOST(path, data, return_type=null) {
     let result = await fetch(path, {
         method: "POST",
         body: data
     });
-    
+
     if(return_type) {
-        try{    
+        try{
             const text = await result.text();
             if (return_type === "json"){
                 return JSON.parse(text);
