@@ -14,17 +14,16 @@
 
 <body>
     <header>
-        <a>PIM</a>
+        <img id="logo" src="htmlPictures/Logo-Design-Template-Branding-Logo-business-circles-view-black-music-seo-circular-computer-stats-Pix.png">
         <!--logo-->
-        <input type="text" placeholder="search">
     </header>
     <main>
         <div class="sidenav">
             <div class="make_cat" Z¨>
-                <input maxlength="13" type="text" class="category-input" placeholder="can only name it with 13 input">
+                <input maxlength="13" type="text" class="category-input" placeholder="name your category">
                 <button id="add_category" onclick="addCategory()">add</button>
             </div>
-            <li onclick="filterOut()" class="category-item">All categorys</li>
+            <li onclick="hideToDo()" class="category-all">All categories</li>
             <ul class="category-list">
             </ul>
         </div>
@@ -32,8 +31,14 @@
         <div class="main">
             <div id="todo">
                 <h3>My Todo list</h3>
-                <input id="ToDo" type="text" placeholder="type your goals">
+                <div id="chooseCategory">
+                <h4>choose a category before you type your task </h4>
+                </div>
+                <div id="todoInput">
+                <input maxlength="22" id="ToDo" type="text" placeholder="type your goals">
                 <button id="ToDo_add" onclick="addToDo()">add to list</button>
+                </div>
+
 
                 <ul id="myList">
 

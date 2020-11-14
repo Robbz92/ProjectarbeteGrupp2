@@ -2,7 +2,6 @@ let myArr = [];
 let dataID;
 let myCategoryArr=[];
 let categoryDataID;
-
 // Add todoItem to db
 getCategoryJSON(); // display current categorys
 
@@ -132,7 +131,8 @@ function rendCategories(){
         newCategoryList.innerHTML += categoryLi;
     }
      
-     $('.category-item').mousedown(function(event) { 
+     $('.category-item').mousedown(function(event) {
+        showToDo()
         console.log('event',event.which);
         switch (event.which) { 
             case 1: categoryDataID = parseInt(event.target.dataset.id); sendCatagoryDataID();
@@ -355,4 +355,12 @@ async function textFiles(){
         posts.push(post);
     
     });
+}
+function hideToDo(){
+    document.getElementById('todoInput').style.display="none"
+    document.getElementById("chooseCategory").style.display="block"
+}
+function showToDo(){
+document.getElementById('todoInput').style.display="block"
+document.getElementById("chooseCategory").style.display="none"
 }
