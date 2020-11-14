@@ -1,20 +1,27 @@
 
-/*no ugly points on list*/
+/*removes point from li */
 li{
     list-style-type: none;
 }
-/*no ugly scroll bar*/
+/*remove scrollbar from overflow:scroll*/
 ::-webkit-scrollbar{
     display: none;
 }
 
-
+/*giving body 0margin and font family to all texts*/
 body{
     margin: 0px;
     font-family:'lemonada';
+    background-image: url(htmlPictures/logo_SABAR_transparent.png);
+    background-repeat: no-repeat;
+    background-color: #3053c718;
+    background-position: 50%;
+    background-position-y: 0%;
+    background-attachment: fixed;
 }
 
 /*fixing header / search/ logo */
+/*header doesnt move even when you scroll*/
 header{
     margin: 0px;
     padding-top: 0px ;
@@ -26,11 +33,12 @@ header{
     width: 100%;
     height:100px;
     } 
-
+#logo{
+    width: 100px;
+}
 /*taking care of categorys*/
 
 div.make_cat{
-  background-color:silver;
   border-bottom-style: solid;
   border-bottom-color: #222222;
 
@@ -46,7 +54,7 @@ div.make_cat>button{
     cursor: pointer;
     height: 50px;
     width: 94px;
-    border:0px;
+    border:3px;
     margin: 0px;
     padding: 0px;
 }
@@ -58,8 +66,9 @@ div.sidenav{
     border-right-width: 3,5px;
     border-right-color: black;
     height: 90%;    
-    background-color:white;
     overflow:scroll;
+    background-color:#b8c9ff;
+
 
     }
 ul.category-list{
@@ -78,11 +87,22 @@ li.category-item{
   cursor: pointer;
   position: relative;
   padding: 15px 10px 15px 10px;
-  background:white;
   font-size: 22px;
   border-bottom-style: solid;
   border-bottom-color:#222222;
   font-weight: bold;
+
+  }
+  li.category-all{
+    color:black;
+    cursor: pointer;
+    position: relative;
+    padding: 15px 10px 15px 10px;
+    font-size: 22px;
+    border-bottom-style: solid;
+    border-bottom-color:#222222;
+    font-weight: bold;
+
   }
   li.category-item:active{
       background-color:black;
@@ -117,13 +137,61 @@ div.main{
 
 /*taking care of todo list*/
  div#todo{
-     padding: 10px;
      height: 600px;
      max-height: 600px;
      max-width: 680px;
      overflow: scroll;
      grid-column: 1;
- }
+    }
+div#todo>h3{
+    margin-left: 220px;
+}
+div#chooseCategory{
+    margin-left: 90px;
+    display: none;
+}
+div#todoInput{
+    margin-left: 160px;
+}
+#ToDo{
+    width: 200px;
+    height: 34px;
+}
+#ToDo_add{
+    height: 40px;
+
+}
+
+ /*todo tasks*/
+ul#myList{
+    padding: 0px;
+    border-style: solid;
+    border-width: 3px;
+    border-color:#222222;
+    height: 460px;
+    width: 380px;
+    max-height: 460px;
+    margin-left: 150px;
+}
+li.some{
+    color:black;
+    font-size: 19px;
+    border-bottom-style: solid;
+    border-bottom-style: black;
+    padding-left: 10px;
+    background-color:#3053c718;
+    overflow: hidden;
+    margin-bottom: 0px;
+    max-height: 35px;
+    position: relative;
+    padding: 5px;
+}
+li.some>span{
+    color: red;
+    float: right;
+    cursor: pointer;
+}
+
 /*filer*/
  div#filer{
      padding: 10px;
