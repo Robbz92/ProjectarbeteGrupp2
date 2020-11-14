@@ -209,7 +209,7 @@ public class Database {
     //////////////////////////////////////////////////////////////
 
     // Hantera filer//
-    public String readFile(Note object){
+    public List<String> readFile(Note object){
         System.out.println("readFile fungerar");
         try{
             PreparedStatement stmt= conn.prepareStatement("SELECT title FROM pictures WHERE id=?");
@@ -229,17 +229,17 @@ public class Database {
             return null;
         }
         else {
-            StringBuilder str = new StringBuilder();
+            List<String> str = new ArrayList<>();
             Path path = Paths.get("www/pictures/" + fileName);
             try {
                 List<String> lines = Files.readAllLines(path);
                 for (String allLines : lines) {
-                    str.append(allLines).append('\n');
+                    str.add(allLines);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return str.toString();
+            return str;
         }
     }
 }
