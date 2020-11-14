@@ -1,10 +1,11 @@
 let myArr = [];
 let dataID;
 let myCategoryArr=[];
-let categoryDataID;
+let categoryDataID = 0;
 
 // Add todoItem to db
 getCategoryJSON(); // display current categorys
+populateAllTodos();
 
 
 // sends text from textbox with button to db
@@ -15,26 +16,15 @@ function addToDo(){
         alert("You need to enter a text!");
     }
     else{
-        POSTJSON(desc.value, "/rest/notes");
+        performPOST("/rest/notes", JSON.stringify({text: desc.value}));
         //getJSON();
         getCatagoryJSON();
     }
     desc.value="";
 }
 
-async function POSTJSON(value, path) {
-
-    const json = JSON.stringify({text: value});
-    const result = await fetch(path, {
-        method: "POST",
-        body: json
-    });
-    
-    return await result.json();
-}
-
 // Do not touch, we need this to rend text correctly.
-async function getJSON(){
+async function populateAllTodos(){
     let result = await fetch("/rest/test");
 
     content = await result.json();
@@ -63,7 +53,7 @@ function rendText(){
      $('.close').mousedown(function(event) { 
         console.log('event',event.which);
         switch (event.which) { 
-            case 1: dataID = parseInt(event.target.dataset.id); postDataID(); getJSON();
+            case 1: dataID = parseInt(event.target.dataset.id); postDataID(); populateAllTodos();
             break;
             default: console.log(`Sorry, we are out of index.`);
         } 
@@ -71,12 +61,7 @@ function rendText(){
 }
 
 async function postDataID(){
-    let dataIDJSON = JSON.stringify({id: dataID});
-
-    let result = await fetch("/rest/dataID", {
-        method: "POST",
-        body: dataIDJSON
-    });
+    performPOST("/rest/dataID", JSON.stringify({id: dataID}));
 }
 
 // END
@@ -94,10 +79,10 @@ function addCategory(){
         alert("You need to enter a text!");
     }
     else{
-        POSTJSON(categoryInput.value, "/rest/index");
+        performPOST("/rest/index", JSON.stringify({text: categoryInput.value}));
         getCategoryJSON()
     }
-   
+
     categoryInput.value= "";
 }
 async function getCategoryJSON(){
@@ -106,11 +91,8 @@ async function getCategoryJSON(){
     }
     else{
         let result = await fetch("/rest/index");
-
-        content = await result.json();
+        content = await result.json(); // seems like this is broken sometimes.
         myCategoryArr = content;
-
-        console.log(myCategoryArr);
 
         rendCategories();
     }
@@ -135,7 +117,10 @@ function rendCategories(){
      $('.category-item').mousedown(function(event) { 
         console.log('event',event.which);
         switch (event.which) { 
-            case 1: categoryDataID = parseInt(event.target.dataset.id); sendCatagoryDataID();
+            case 1: {
+                categoryDataID = parseInt(event.target.dataset.id);
+                sendCatagoryDataID();
+            }
             break;
         } 
     });
@@ -152,47 +137,24 @@ function rendCategories(){
 }
 // delete category
 async function postCategoryDataID(){
-    let categoryDataIDJSON = JSON.stringify({id: categoryDataID});
-
-    let result = await fetch("/rest/index2", {
-        method: "POST",
-        body: categoryDataIDJSON
-    });
+    performPOST("/rest/index2", JSON.stringify({id: categoryDataID}));
 }
 
 // skickar id på den text man trycker på (categorys)
 async function sendCatagoryDataID(){
-    let categoryDataIDJSON = JSON.stringify({id: categoryDataID});
-    let result = await fetch("/rest/currID", {
-        method: "POST",
-        body: categoryDataIDJSON
-    });
+    performPOST("/rest/currID", JSON.stringify({id: categoryDataID}));
     getCatagoryJSON();
 }
 
 async function getCatagoryJSON(){
+    const path = categoryDataID === 1 ? "/rest/test" : "/rest/appet";
+    let result = await fetch(path);
+    content = await result.json();
+    myArr = content
 
-    if(categoryDataID == 1){
-        let result = await fetch("/rest/test");
+    console.log(myArr);
 
-        content = await result.json();
-        myArr = content
-
-        console.log(myArr);
-
-        rendSelectiveText();
-    }
-
-    else{
-        let result = await fetch("/rest/appet");
-
-        content = await result.json();
-        myArr = content
-
-        console.log(myArr);
-
-        rendSelectiveText();
-    }
+    rendSelectiveText();
 }
 
 function rendSelectiveText(){
@@ -226,6 +188,7 @@ function rendSelectiveText(){
 let posts = [];
 getPosts();
 
+// rätt grejor för drop
 async function getPosts(){
     let result = await fetch('/rest/posts');
     posts = await result.json();
@@ -262,20 +225,16 @@ async function createPost(e){
     e.preventDefault();
 
     // upload image, formdata
-    let files = document.querySelector('input[type=file]').files;
+    let files = document.querySelector('#imagesinput').files;
     let fromData = new FormData();
 
     for(let file of files){
+        console.log(file.name);
         fromData.append('files', file, file.name);
     }
 
     // upload selected files to server
-    let uploadResult = await fetch('/api/file-upload', {
-        method: 'POST',
-        body: fromData
-    });
-
-    let imageUrl = await uploadResult.text();
+    let imageUrl = await performPOST('/api/file-upload', fromData, 'text');
 
     let titleInput = document.querySelector('#title');
     let contentInput = document.querySelector('#content');
@@ -286,73 +245,148 @@ async function createPost(e){
         imageUrl: imageUrl
     }
 
-    let result = await fetch("/rest/posts", {
-        method: "POST",
-        body: JSON.stringify(post)
-    });
+    let result = await performPOST("/rest/posts", JSON.stringify(post), 'text');
 
     posts.push(post);
 
-    console.log(await result.text());
+    console.log(result);
 }
 
 function filterOut(){
-    getJSON();
+    populateAllTodos();
 }
 
-//hämtar textfiler utan att ladda upp dem
+async function getTextPost(){
+    //getTextContent();
+}
+
+function rendTextFileContent(){
+    noteList = document.querySelector("#textContent");
+    noteList.innerHTML = `
+    <li>
+       ${myArr}
+    </li>
+   `;
+}
+
+getTextPosts(); // todo check this
+function rendTextFileContent(){
+    noteList = document.querySelector("#textContent");
+    noteList.innerHTML = "";
+
+    for(let content of myArr){
+        let textLi = `
+         <li>
+            ${content}
+         </li>
+        `;
+        noteList.innerHTML += textLi;
+    }
+}
 async function textFiles(){
-    
-    document.getElementById('inputfileID') 
-    .addEventListener('change', async function() { 
-        
-        var fr=new FileReader(); 
-        fr.onload=function(){ 
-            document.getElementById('output') 
-            .textContent=fr.result; 
-        } 
-        
-        fr.readAsText(this.files[0]); 
+
+    document.getElementById('inputfileID')
+    .addEventListener('change', async function() {
+
+        var fr=new FileReader();
+        fr.onload=function(){
+            document.getElementById('output')
+            .textContent=fr.result;
+        }
+
+        fr.readAsText(this.files[0]);
         var fileInput = document.getElementById('inputfileID');
         var textFilename = fileInput.files[0].name;
 
-        alert(textFilename);
-        console.log(textFilename);
 
 
         // upload image, formdata
         let files = document.querySelector('input[type=file]').files;
         let fromData = new FormData();
-    
+
         for(let file of files){
             fromData.append('files', file, textFilename);
         }
-        
-    
+
+
         // upload selected files to server
         let uploadResult = await fetch('/api/file-upload', {
             method: 'POST',
             body: fromData
         });
-    
+
         let imageUrl = await uploadResult.text();
-        alert(imageUrl)
 
         let titleInput = textFilename;
-        alert(titleInput)
-    
+
         let post = {
             title: titleInput,
-            
             imageUrl: imageUrl
         }
-    
+
         let result = await fetch("/rest/posts", {
             method: "POST",
             body: JSON.stringify(post)
         });
-    
+
         posts.push(post);
-    
+
     });
+    getTextPosts();
+}
+async function getTextPosts(){
+    let result = await fetch('/rest/textFiles');
+    posts = await result.json();
+    myArr=posts;
+    //console.log(posts);
+    alert(myArr)
+    renderTextPosts();
+}
+function renderTextPosts(){
+    let postList = document.querySelector("#dropDownID");
+    postList.innerHTML = "";
+
+    for(let post of myArr){
+
+        let postLi = `
+            <option class="testOptionClass" data-id=${post.id}>
+            ${post.title}
+            </option>
+
+        `;
+
+        postList.innerHTML += postLi;
+    }
+    $('#dropDownID').change(function(){
+        dataID = $(this).find('option:selected').attr('data-id')
+        postTextFileID();
+        //getTextContent();
+    })
+}
+async function postTextFileID(){
+    myArr = await performPOST('/rest/textFile', JSON.stringify({id: dataID}), "json");
+    rendTextFileContent();
+}
+
+async function performPOST(path, data, return_type=null) {
+    let result = await fetch(path, {
+        method: "POST",
+        body: data
+    });
+
+    if(return_type) {
+        try{
+            const text = await result.text();
+            if (return_type === "json"){
+                return JSON.parse(text);
+            } else {
+                return text;
+            }
+        }catch(err) {
+            console.error(err, err.stack);
+            return null;
+        }
+    } else {
+        return null;
+    }
 }
