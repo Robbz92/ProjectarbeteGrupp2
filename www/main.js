@@ -78,12 +78,12 @@ async function postDataID(){
     });
 }
 
-
+// END
 const categoryInput= document.querySelector('.category-input');
 const categoryList= document.querySelector('.category-list');
 
 
-
+// START
 // for new category
 function addCategory(){
     
@@ -96,20 +96,8 @@ function addCategory(){
         POSTJSON(categoryInput.value, "/rest/index");
         getCategoryJSON()
     }
-    console.log("hallå")
-    const categoryDiv= document.createElement('div');
-    categoryDiv.classList.add("category");
-
-    const newCategory=document.createElement('li');
-    newCategory.innerText=categoryInput.value;
-    newCategory.classList.add('category-item');
-    categoryDiv.appendChild(newCategory);
-
-    categoryList.appendChild(categoryDiv);
-
+   
     categoryInput.value= "";
-
-
 }
 async function getCategoryJSON(){
     if(categoryDataID == 1){
@@ -312,31 +300,61 @@ function filterOut(){
     getJSON();
 }
 
-async function getTextPost(){
-    getTextContent();
-}
+//hämtar textfiler utan att ladda upp dem
+async function textFiles(){
+    
+    document.getElementById('inputfileID') 
+    .addEventListener('change', async function() { 
+        
+        var fr=new FileReader(); 
+        fr.onload=function(){ 
+            document.getElementById('output') 
+            .textContent=fr.result; 
+        } 
+        
+        fr.readAsText(this.files[0]); 
+        var fileInput = document.getElementById('inputfileID');
+        var textFilename = fileInput.files[0].name;
 
-async function getTextContent(){
-    let result = await fetch('/rest/textFile');
-    posts = await result.json();
-    myArr = posts;
-    console.log(posts);
+        alert(textFilename);
+        console.log(textFilename);
 
-    rendTextFileContent();
-}
 
-function rendTextFileContent(){
-    noteList = document.querySelector("#textContent");
-    noteList.innerHTML = "";
+        // upload image, formdata
+        let files = document.querySelector('input[type=file]').files;
+        let fromData = new FormData();
+    
+        for(let file of files){
+            fromData.append('files', file, textFilename);
+        }
+        
+    
+        // upload selected files to server
+        let uploadResult = await fetch('/api/file-upload', {
+            method: 'POST',
+            body: fromData
+        });
+    
+        let imageUrl = await uploadResult.text();
+        alert(imageUrl)
 
-    for(let content of myArr){
-        let textLi = `
-         <li>
-            ${content}
-         </li>
-        `;
-        noteList.innerHTML += textLi;
-    }
+        let titleInput = textFilename;
+        alert(titleInput)
+    
+        let post = {
+            title: titleInput,
+            
+            imageUrl: imageUrl
+        }
+    
+        let result = await fetch("/rest/posts", {
+            method: "POST",
+            body: JSON.stringify(post)
+        });
+    
+        posts.push(post);
+    
+    });
 }
 function hideToDo(){
     document.getElementById('todoInput').style.display="none"

@@ -65,7 +65,7 @@ public class Database {
     public List<Note> getSelectiveText(int dataID){
         List<Note> notes = new ArrayList<>();
         try{
-            PreparedStatement stmt = conn.prepareStatement("SELECT text FROM todos, categories WHERE categories.id = ? AND todos.category = categories.id order by categories.category DESC;");
+            PreparedStatement stmt = conn.prepareStatement("SELECT todos.text, todos.id FROM todos, categories WHERE categories.id = ? AND todos.category = categories.id order by categories.category DESC;");
             stmt.setInt(1, dataID);
             ResultSet resultSet = stmt.executeQuery();
 
@@ -214,28 +214,4 @@ public class Database {
     }
     //////////////////////////////////////////////////////////////
 
-    // Hantera filer//
-    public List<String> readFile(){
-        List<String> test = null;
-
-        if(fileName.equals("null")){
-            return null;
-        }
-        else {
-            Path path = Paths.get("www/pictures/" + fileName);
-
-
-            test = new ArrayList<>();
-
-            try {
-                List<String> lines = Files.readAllLines(path);
-                for (String allLines : lines) {
-                    test.add(allLines);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return test;
-    }
 }
