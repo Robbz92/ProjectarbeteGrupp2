@@ -7,7 +7,6 @@ let categoryDataID = 0;
 getCategoryJSON(); // display current categorys
 populateAllTodos();
 
-
 // sends text from textbox with button to db
 function addToDo(){
     let desc = document.querySelector("#ToDo");
@@ -17,7 +16,6 @@ function addToDo(){
     }
     else{
         performPOST("/rest/notes", JSON.stringify({text: desc.value}));
-        //getJSON();
         getCatagoryJSON();
     }
     desc.value="";
@@ -29,8 +27,6 @@ async function populateAllTodos(){
 
     content = await result.json();
     myArr = content
-
-    console.log(myArr);
 
     rendText();
 }
@@ -50,8 +46,7 @@ function rendText(){
         noteList.innerHTML += textLi;
     }
      // remove item from span
-     $('.close').mousedown(function(event) { 
-        console.log('event',event.which);
+     $('.close').mousedown(function(event) {
         switch (event.which) { 
             case 1: dataID = parseInt(event.target.dataset.id); postDataID(); populateAllTodos();
             break;
@@ -64,17 +59,13 @@ async function postDataID(){
     performPOST("/rest/dataID", JSON.stringify({id: dataID}));
 }
 
-// END
 const categoryInput= document.querySelector('.category-input');
 const categoryList= document.querySelector('.category-list');
 
-
-// START
 // for new category
 function addCategory(){
     
     //create a new category
-
     if(categoryInput.value == ""){
         alert("You need to enter a text!");
     }
@@ -83,8 +74,19 @@ function addCategory(){
         getCategoryJSON()
     }
 
+    const categoryDiv= document.createElement('div');
+    categoryDiv.classList.add("category");
+
+    const newCategory=document.createElement('li');
+    newCategory.innerText=categoryInput.value;
+    newCategory.classList.add('category-item');
+    categoryDiv.appendChild(newCategory);
+
+    categoryList.appendChild(categoryDiv);
+
     categoryInput.value= "";
 }
+
 async function getCategoryJSON(){
     if(categoryDataID == 1){
         alert("You cannot delete all categories");
@@ -114,19 +116,17 @@ function rendCategories(){
         newCategoryList.innerHTML += categoryLi;
     }
      
-     $('.category-item').mousedown(function(event) { 
-        console.log('event',event.which);
+     $('.category-item').mousedown(function(event) {
         switch (event.which) { 
             case 1: {
-                categoryDataID = parseInt(event.target.dataset.id);
+                categoryDataID = parseInt(event.target.dataset.id); 
                 sendCatagoryDataID();
             }
             break;
         } 
     });
       // remove item from span
-      $('.categoryClose').mousedown(function(event) { 
-        console.log('event',event.which);
+      $('.categoryClose').mousedown(function(event) {
         switch (event.which) { 
             case 1: categoryDataID = parseInt(event.target.dataset.id); postCategoryDataID(); getCategoryJSON();
             break;
@@ -152,8 +152,6 @@ async function getCatagoryJSON(){
     content = await result.json();
     myArr = content
 
-    console.log(myArr);
-
     rendSelectiveText();
 }
 
@@ -172,8 +170,7 @@ function rendSelectiveText(){
     }
 
         // remove item from span
-        $('.some').mousedown(function(event) { 
-        console.log('event',event.which);
+        $('.some').mousedown(function(event) {
         switch (event.which) { 
             case 1: dataID = parseInt(event.target.dataset.id); postDataID(); getCatagoryJSON();
             break;
@@ -183,8 +180,6 @@ function rendSelectiveText(){
 }
 
 //Hantering av bilder
-
-// skapar array med posts
 let posts = [];
 getPosts();
 
@@ -192,8 +187,6 @@ getPosts();
 async function getPosts(){
     let result = await fetch('/rest/posts');
     posts = await result.json();
-
-    console.log(posts);
 
     renderPosts();
 }
@@ -229,7 +222,6 @@ async function createPost(e){
     let fromData = new FormData();
 
     for(let file of files){
-        console.log(file.name);
         fromData.append('files', file, file.name);
     }
 
@@ -246,18 +238,12 @@ async function createPost(e){
     }
 
     let result = await performPOST("/rest/posts", JSON.stringify(post), 'text');
-
+    
     posts.push(post);
-
-    console.log(result);
 }
 
 function filterOut(){
     populateAllTodos();
-}
-
-async function getTextPost(){
-    //getTextContent();
 }
 
 function rendTextFileContent(){
@@ -269,68 +255,52 @@ function rendTextFileContent(){
    `;
 }
 
-getTextPosts(); // todo check this
-function rendTextFileContent(){
-    noteList = document.querySelector("#textContent");
-    noteList.innerHTML = "";
-
-    for(let content of myArr){
-        let textLi = `
-         <li>
-            ${content}
-         </li>
-        `;
-        noteList.innerHTML += textLi;
-    }
-}
+getTextPosts();
 async function textFiles(){
 
-    document.getElementById('inputfileID')
-    .addEventListener('change', async function() {
-
-        var fr=new FileReader();
-        fr.onload=function(){
-            document.getElementById('output')
-            .textContent=fr.result;
-        }
-
-        fr.readAsText(this.files[0]);
+    document.getElementById('inputfileID') 
+    .addEventListener('change', async function() { 
+        
+        var fr=new FileReader(); 
+        fr.onload=function(){ 
+            document.getElementById('output') 
+            .textContent=fr.result; 
+        } 
+        
+        fr.readAsText(this.files[0]); 
         var fileInput = document.getElementById('inputfileID');
         var textFilename = fileInput.files[0].name;
-
-
 
         // upload image, formdata
         let files = document.querySelector('input[type=file]').files;
         let fromData = new FormData();
-
+    
         for(let file of files){
             fromData.append('files', file, textFilename);
         }
-
-
+    
         // upload selected files to server
         let uploadResult = await fetch('/api/file-upload', {
             method: 'POST',
             body: fromData
         });
-
+    
         let imageUrl = await uploadResult.text();
-
+    
         let titleInput = textFilename;
-
+    
         let post = {
             title: titleInput,
             imageUrl: imageUrl
         }
-
+    
         let result = await fetch("/rest/posts", {
             method: "POST",
             body: JSON.stringify(post)
         });
-
+    
         posts.push(post);
-
+    
     });
     getTextPosts();
 }
@@ -338,8 +308,7 @@ async function getTextPosts(){
     let result = await fetch('/rest/textFiles');
     posts = await result.json();
     myArr=posts;
-    //console.log(posts);
-    alert(myArr)
+    
     renderTextPosts();
 }
 function renderTextPosts(){
@@ -352,7 +321,7 @@ function renderTextPosts(){
             <option class="testOptionClass" data-id=${post.id}>
             ${post.title}
             </option>
-
+            
         `;
 
         postList.innerHTML += postLi;
@@ -360,7 +329,6 @@ function renderTextPosts(){
     $('#dropDownID').change(function(){
         dataID = $(this).find('option:selected').attr('data-id')
         postTextFileID();
-        //getTextContent();
     })
 }
 async function postTextFileID(){
@@ -368,14 +336,18 @@ async function postTextFileID(){
     rendTextFileContent();
 }
 
-async function performPOST(path, data, return_type=null) {
+// depending on return_type it doesnt do anything or converts to text or converts to json
+// if return_type is null it doesnt convert anything
+// if its 'json' itll try to convert to json
+/// otherwise itll convert to text
+async function performPOST(path, data, return_type=null) {   
     let result = await fetch(path, {
         method: "POST",
         body: data
     });
-
+    
     if(return_type) {
-        try{
+        try{    
             const text = await result.text();
             if (return_type === "json"){
                 return JSON.parse(text);

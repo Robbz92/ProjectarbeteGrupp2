@@ -30,7 +30,6 @@ public class Main {
         // add todoo items in sql
         app.post("/rest/notes", (req,res) ->{
             String content = (String)req.getBody().get("text");
-            //System.out.println(categoryID);
             db.addContentToDB(content, categoryID);
 
             res.send("Ok");
@@ -108,22 +107,17 @@ public class Main {
         });
 
         app.post("/rest/textFile", (req, res)->{
-            System.out.println("Hey1");
             int id  = Integer.parseInt(String.valueOf(req.getBody().get("id")));
             Note textFile= new Note();
             textFile.setId(id);
             List<String> str = db.readFile(textFile);
-            System.out.println(textFile);
 
             res.json(str);
-            System.out.println(str);
         });
 
         app.get("/rest/textFiles", (req, res) ->{
-            System.out.println("Hey2");
             List<BlogPost> posts = db.getPosts();
             res.json(posts);
-
         });
 
         // will serve both the html/css/js files and the uploads folder

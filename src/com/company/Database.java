@@ -18,9 +18,7 @@ import java.util.List;
  */
 public class Database {
     private Connection conn;
-    private int getCategoryID;
     private String fileName;
-
 
     public Database(){
         try {
@@ -116,7 +114,6 @@ public class Database {
                 String name = resultSet.getString("category");
 
                 Categories names = new Categories(categoryId,name);
-                System.out.println(names);
                 categoryItems.add(names);
             } 
 
@@ -179,7 +176,6 @@ public class Database {
     }
 
     public String uploadImage(FileItem image){
-        fileName = image.getName();
         Path path = Paths.get( "pictures", image.getName());
 
         try(var os = new FileOutputStream(Paths.get("www").resolve(path).toString())){
@@ -210,7 +206,6 @@ public class Database {
 
     // Hantera filer//
     public List<String> readFile(Note object){
-        System.out.println("readFile fungerar");
         try{
             PreparedStatement stmt= conn.prepareStatement("SELECT title FROM pictures WHERE id=?");
             stmt.setInt(1,object.getId());
@@ -223,7 +218,6 @@ public class Database {
 
         }
 
-        System.out.println(fileName);
         if(fileName.equals("null")){
 
             return null;
