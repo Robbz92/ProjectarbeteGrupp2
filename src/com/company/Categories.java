@@ -1,6 +1,5 @@
 package com.company;
 
-
 public class Categories {
     private int categoryID;
     private String category;

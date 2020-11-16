@@ -13,9 +13,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * @author Robin Persson,
- */
 public class Database {
     private Connection conn;
     private String fileName;
