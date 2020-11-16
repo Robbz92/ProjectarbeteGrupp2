@@ -1,8 +1,5 @@
 package com.company;
 
-/**
- * @author Robin Persson,
- */
 public class BlogPost {
     private int id;
     private String title;

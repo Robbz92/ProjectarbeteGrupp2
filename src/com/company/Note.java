@@ -1,8 +1,5 @@
 package com.company;
 
-/**
- * @author Robin Persson,
- */
 public class Note {
     private String text;
     private int id;

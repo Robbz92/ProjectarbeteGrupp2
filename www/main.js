@@ -64,27 +64,8 @@ const categoryList= document.querySelector('.category-list');
 
 // for new category
 function addCategory(){
-    
-    //create a new category
-    if(categoryInput.value == ""){
-        alert("You need to enter a text!");
-    }
-    else{
-        performPOST("/rest/index", JSON.stringify({text: categoryInput.value}));
-        getCategoryJSON()
-    }
-
-    const categoryDiv= document.createElement('div');
-    categoryDiv.classList.add("category");
-
-    const newCategory=document.createElement('li');
-    newCategory.innerText=categoryInput.value;
-    newCategory.classList.add('category-item');
-    categoryDiv.appendChild(newCategory);
-
-    categoryList.appendChild(categoryDiv);
-
-    categoryInput.value= "";
+    performPOST("/rest/index", JSON.stringify({text: categoryInput.value}));
+    getCategoryJSON()
 }
 
 async function getCategoryJSON(){
@@ -367,7 +348,7 @@ async function performPOST(path, data, return_type=null) {
 function hideToDo(){
     document.getElementById('todoInput').style.display="none"
     document.getElementById("chooseCategory").style.display="block"
-    getJSON()
+    populateAllTodos();
 }
 function showToDo(){
 document.getElementById('todoInput').style.display="block"
