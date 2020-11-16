@@ -16,7 +16,8 @@ public class Main {
         Express app = new Express();
 
         app.post("/rest/currID", (req, res) ->{
-            categoryID = (int)req.getBody().get("id");
+            Integer content = (Integer) req.getBody().get("id");
+            categoryID = content != null ? content : 0;
 
             res.send("ok");
         });
@@ -29,7 +30,6 @@ public class Main {
         // add todoo items in sql
         app.post("/rest/notes", (req,res) ->{
             String content = (String)req.getBody().get("text");
-            //System.out.println(categoryID);
             db.addContentToDB(content, categoryID);
 
             res.send("Ok");
@@ -63,7 +63,6 @@ public class Main {
         //delete category
         app.post("/rest/index2", (req, res) ->{
             int categoryDataID = (int)req.getBody().get("id");
-            //System.out.println(categoryDataID);
             db.deleteCategoryFromDB(categoryDataID);
 
             res.send("Ok");
@@ -106,7 +105,21 @@ public class Main {
             }
             res.send(imageUrl);
         });
-        
+
+        app.post("/rest/textFile", (req, res)->{
+            int id  = Integer.parseInt(String.valueOf(req.getBody().get("id")));
+            Note textFile= new Note();
+            textFile.setId(id);
+            List<String> str = db.readFile(textFile);
+
+            res.json(str);
+        });
+
+        app.get("/rest/textFiles", (req, res) ->{
+            List<BlogPost> posts = db.getPosts();
+            res.json(posts);
+        });
+
         // will serve both the html/css/js files and the uploads folder
         try {
             app.use(Middleware.statics(Paths.get("www").toString()));

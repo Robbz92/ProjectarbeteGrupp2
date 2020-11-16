@@ -9,10 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.Instant;
-import express.utils.Utils;
-
-import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -20,9 +18,7 @@ import java.util.List;
  */
 public class Database {
     private Connection conn;
-    private int getCategoryID;
     private String fileName;
-
 
     public Database(){
         try {
@@ -45,21 +41,17 @@ public class Database {
         }
     }
 
-    public List<Note> getNotesFromDB(){
-        List<Note> notes = new ArrayList<>();
-
-        try{
+    public List<Note> getNotesFromDB() {
+        try {
             PreparedStatement stmt = conn.prepareStatement("SELECT text, id FROM todos");
             ResultSet resultSet = stmt.executeQuery();
 
             Note[] note = (Note[]) Utils.readResultSetToObject(resultSet, Note[].class);
-            notes = List.of(note);
-
-        }catch(Exception e){
+            return List.of(note);
+        } catch(Exception e) {
             e.printStackTrace();
         }
-
-        return notes;
+        return new LinkedList<>();
     }
 
     public List<Note> getSelectiveText(int dataID){
@@ -122,7 +114,6 @@ public class Database {
                 String name = resultSet.getString("category");
 
                 Categories names = new Categories(categoryId,name);
-                System.out.println(names);
                 categoryItems.add(names);
             } 
 
@@ -185,17 +176,16 @@ public class Database {
     }
 
     public String uploadImage(FileItem image){
-        fileName = image.getName();
-        String imageUrl = "/pictures/" + image.getName();
+        Path path = Paths.get( "pictures", image.getName());
 
-        try(var os = new FileOutputStream(Paths.get("www" + imageUrl).toString())){
+        try(var os = new FileOutputStream(Paths.get("www").resolve(path).toString())){
             os.write(image.get());
         }
         catch(Exception e) {
             e.printStackTrace();
             return null;
         }
-        return imageUrl;
+        return path.toString();
     }
 
     public void updatePost(BlogPost post){
@@ -214,4 +204,36 @@ public class Database {
     }
     //////////////////////////////////////////////////////////////
 
+    // Hantera filer//
+    public List<String> readFile(Note object){
+        try{
+            PreparedStatement stmt= conn.prepareStatement("SELECT title FROM pictures WHERE id=?");
+            stmt.setInt(1,object.getId());
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                fileName = result.getString("title");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+
+        }
+
+        if(fileName.equals("null")){
+
+            return null;
+        }
+        else {
+            List<String> str = new ArrayList<>();
+            Path path = Paths.get("www/pictures/" + fileName);
+            try {
+                List<String> lines = Files.readAllLines(path);
+                for (String allLines : lines) {
+                    str.add(allLines);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
 }
