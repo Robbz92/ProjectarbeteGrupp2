@@ -359,6 +359,7 @@ async function textFiles(){
 function hideToDo(){
     document.getElementById('todoInput').style.display="none"
     document.getElementById("chooseCategory").style.display="block"
+    getJSON()
 }
 function showToDo(){
 document.getElementById('todoInput').style.display="block"

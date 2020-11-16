@@ -130,7 +130,7 @@ div.main{
     padding-top: 100px;
     margin-left: 300px;
     display: grid;
-    grid-template-columns: 680px;
+    grid-template-columns: 660px;
     grid-column-gap: 0px;
 
 }
@@ -183,7 +183,6 @@ li.some{
     overflow: hidden;
     margin-bottom: 0px;
     max-height: 35px;
-    position: relative;
     padding: 5px;
 }
 li.some>span{
@@ -191,6 +190,24 @@ li.some>span{
     float: right;
     cursor: pointer;
 }
+li.close{
+    color:black;
+    font-size: 19px;
+    border-bottom-style: solid;
+    border-bottom-style: black;
+    padding-left: 10px;
+    background-color:#3053c718;
+    overflow: hidden;
+    margin-bottom: 0px;
+    max-height: 35px;
+    padding: 5px;
+}
+li.close>span{
+    color: red;
+    float: right;
+    cursor: pointer;
+}
+
 
 /*filer*/
  div#filer{
@@ -214,6 +231,19 @@ li.some>span{
      overflow: scroll;
     -ms-grid-column-span:3/2 ;
  }
+ .But-Style-1{
+    appearance: button;
+    display: inline-block;
+    text-align: center;
+    cursor: default;
+    background-color: gray;
+    box-sizing: border-box;
+    padding: 1px 6px;
+    border-width: 2px;
+    border-radius: 30px;
+    border-style: solid;
+}
+
 
 
 
