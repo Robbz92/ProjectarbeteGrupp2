@@ -50,30 +50,30 @@
             <div id="filer">
                 <h3>My Files</h3>
 
-                <ul id= "textContent">
-                    <li>
-
-                    </li>
-                </ul>
+                
 
                 <input type="file" name="inputfile" onclick="textFiles()" id="inputfileID">
 
                     <select id="dropDownID"></select>
                     <br>
                     <pre id="output"></pre>
+                    <ul id= "textContent">
+                        <li>
+    
+                        </li>
+                    </ul>
 
             </div>
 
             <div id="bilder">
                 <form onsubmit="createPost(event)">
                 <h3>My Pictures</h3>
-                <input id="title" required type="text" placeholder="title" value="test">
-                <textarea id="content" required placeholder="content" cols="30" rows="10"></textarea>
+                <input maxlength="15" id="title" required type="text" placeholder="title" value="test">
+                <textarea maxlength="23" id="content" required placeholder="content" cols="20" rows="10"></textarea>
                 <button class="But-Style-1" type="submit">UPPLOAD PICTURE</button>
                 <input id="imagesinput" type="file" accept="image/*" placeholder="select image">
                 </form>
-                
-                <br>
+
                 <ul id ="post-list">
                 </ul>
             </div>
