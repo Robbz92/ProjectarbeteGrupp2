@@ -173,6 +173,7 @@ ul#myList{
     width: 380px;
     max-height: 460px;
     margin-left: 150px;
+    overflow: scroll;
 }
 li.some{
     color:black;
@@ -300,7 +301,6 @@ select{
 
     background: #b8c9ff;
     display: inline-block;
-    position: relative;
     cursor: pointer;
     font-weight: bold;
     font-size: 17px;
@@ -317,10 +317,3 @@ select{
     background-color:#222222;
     color: white;
     }
-
-
-
-
-
-
-

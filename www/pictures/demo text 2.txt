@@ -1,0 +1,4 @@
+detta är demotext nummer 2 för att visa att man kan byta filer i drop down menyn!
+Om man gör det kommer det att displaya direkt och man slipper refresha sidan!
+jag borde visa todos och kategorier först innan jag gör något annat...samt ha X antal bilder redan när vi börjar redovisningen imorgon!
+VIktigt att tänka på.

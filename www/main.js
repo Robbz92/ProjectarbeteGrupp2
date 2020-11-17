@@ -64,21 +64,26 @@ const categoryList= document.querySelector('.category-list');
 
 // for new category
 function addCategory(){
+   //create a new category
+   if(categoryInput.value == ""){
+    alert("You need to enter a text!");
+}
+else{
     performPOST("/rest/index", JSON.stringify({text: categoryInput.value}));
     getCategoryJSON()
+
+}
+categoryInput.value="";
 }
 
 async function getCategoryJSON(){
-    if(categoryDataID == 1){
-        alert("You cannot delete all categories");
-    }
-    else{
+   
         let result = await fetch("/rest/index");
         content = await result.json(); // seems like this is broken sometimes.
         myCategoryArr = content;
 
         rendCategories();
-    }
+    
 }
 
 function rendCategories(){
